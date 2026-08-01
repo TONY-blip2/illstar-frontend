@@ -1,0 +1,97 @@
+[
+  {
+    "id": "p1",
+    "name": "CLASSIC TEE",
+    "prices": {
+      "ZMW": 249.99,
+      "USD": 49.99,
+      "GBP": 49.99,
+      "EUR": 49.99
+    },
+    "image": "images/classictee-front.jpg",
+    "backImage": "images/classictee-back.jpg",
+    "description": "230 gsm fabric Weight, 100% Cotton. Heavy Screen Print.",
+    "sizes": [ "M","L", "XL"],
+    "colors": ["Black"]
+    
+
+  },
+  {
+    "id": "p2",
+    "name": "HEATWAVE TEE",
+    "prices": {
+      "ZMW": 249.99,
+      "USD": 49.99,
+      "GBP": 49.99,
+      "EUR": 49.99
+    },
+    "image": "images/heatwavetee-front.jpg",
+    "backImage": "images/heatwavetee-back.jpg",
+    "modelImage1": "images/modelImage1.jpg",
+    "modelImage2": "images/modelImage2.jpg",
+    "description": "Limited Edition Summer Collection Vol 1.",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["White"]
+  
+  },
+  {
+    "id": "p3",
+    "name": "BRAIN DAMAGE TEE",
+    "prices": {
+      "ZMW": 249.99,
+      "USD": 49.99,
+      "GBP": 49.99,
+      "EUR": 49.99
+    },
+    "image": "images/brain damage -front.jpg",
+    "backImage": "images/brain damage-back.jpg",
+    "description": "Lightweight bomber jacket with embroidered logo.",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["White"]
+  },
+  {
+    "id": "p4",
+    "name": "BRAIN DAMAGE TEE (BLACK)",
+    "prices": {
+      "ZMW": 249.99,
+      "USD": 49.99,
+      "GBP": 49.99,
+      "EUR": 49.99
+    },
+    "image": "images/brindmgeteeblck.front.jpg",
+    "backImage": "images/brindmgeteeblck.bck.jpg",
+    "description": "Lightweight bomber jacket with embroidered logo.",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["Black"]
+  },
+  {
+    "id": "p5",
+    "name": "MINIMAL CLASSIC TEE",
+    "prices": {
+      "ZMW": 249.99,
+      "USD": 49.99,
+      "GBP": 49.99,
+      "EUR": 49.99
+    },
+    "image": "images/minimal classic-front.jpg",
+    "backImage": "images/minimal classic-back.jpg",
+    "description": "tootuff.",
+    "sizes": ["S", "M", "L", "XL"],
+    "colors": ["Black"]
+  },
+  {
+    "id": "p6",
+    "name": "CLASSIC HOODIE",
+    "prices": {
+      "ZMW": 399.99,
+      "USD": 49.99,
+      "GBP": 49.99,
+      "EUR": 49.99
+    },
+    "image": "images/classic-hoodie-front.jpg",
+    "backImage": "images/classic-hoodie-bck.jpg",
+    "description": "tootuff.",
+    "sizes": ["L", "XL"],
+    "colors": ["Black"]
+  }
+]

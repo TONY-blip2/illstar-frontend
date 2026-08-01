@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ILLSTAR — Streetwear</title>
+  
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- WORLDWIDE VISITOR TRACKER (Runs instantly for everyone) -->
+  <script>
+    (function(){
+      try {
+        var d = JSON.parse(localStorage.getItem('illstar_visits') || '{}');
+        var m = new Date().toISOString().slice(0, 7); // YYYY-MM
+        d[m] = (d[m] || 0) + 1;
+        localStorage.setItem('illstar_visits', JSON.stringify(d));
+      } catch(e) {}
+    })();
+  </script>
+
+  <!-- Rest of your body content... -->
+  
+  <header class="site-header">
+
+    <div class="container header-flex">
+
+      <!-- LEFT: HAMBURGER -->
+      <button id="menu-btn" class="menu-btn">☰</button>
+
+      <!-- CENTER: LOGO -->
+      <a href="#" class="brand center-logo">
+        <img src="images/logo-dark.png" class="logo-img logo-dark">
+        <img src="images/logo-light.png" class="logo-img logo-light">
+      </a>
+
+      <!-- RIGHT: ACTIONS -->
+      <div class="header-right">
+
+        <!-- CURRENCY -->
+        <div class="currency-selector">
+          <button id="currency-btn">
+            <img src="images/zm.png" alt="ZMK" style="width:16px;margin-right:4px;"> ZMW (K) ▾
+          </button>
+          <ul id="currency-list">
+            <li data-symbol="K" data-rate="1"><img src="images/zm.png"> ZMW ( K)</li>
+            <li data-symbol="$" data-rate="0.20"><img src="images/us.png"> USD ($)</li>
+            <li data-symbol="€" data-rate="0.20"><img src="images/eu.png"> Euro (€)</li>
+            <li data-symbol="£" data-rate="0.20"><img src="images/uk.png"> UK (£)</li>
+          </ul>
+        </div>
+
+        <!-- CART -->
+        <div class="cart-box"><span id="cart-count">0</span>
+          <img src="images/cart-dark.png" class="cart-img logo-dark">
+          <img src="images/cart-light.png" class="cart-img logo-light">
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- SLIDE MENU -->
+  <div id="side-menu" class="side-menu">
+    <button id="close-menu" class="close-btn">✕</button>
+    <ul>
+        <li><a href="#" data-modal="profile">Profile</a></li>
+        <li><a href="#" data-modal="signup">Create Account</a></li>
+        <li><a href="#" data-modal="login">Login</a></li>
+
+      <!-- DARK MODE TOGGLE -->
+      <li class="theme-item">
+        <span>Theme</span>
+        <label class="switch">
+          <input type="checkbox" id="theme-toggle">
+          <span class="slider"></span>
+        </label>
+      </li>
+    </ul>
+  </div>
+
+  <!-- OVERLAY -->
+  <div id="overlay" class="overlay"></div>
+
+  <!-- CART PANEL -->
+  <div id="cart-panel" class="cart-panel">
+    <div class="cart-header">
+      <h3>YOUR CART</h3>
+      <button id="close-cart">✕</button>
+    </div>
+    <div id="cart-items" class="cart-items"></div>
+    <div class="cart-footer">
+      <p>Total: <span id="cart-total">K0.00</span></p>
+      <button id="checkout-btn" class="checkout-btn">
+        CHECKOUT • K0.00 ZMW
+      </button>
+    </div>
+    <p class="cart-note">Shipping &amp; taxes calculated at checkout</p>
+  </div>
+
+  <main class="container">
+    <section id="hero" class="hero">
+      <div class="welcome-banner">
+        <img src="images/welcome-banner.jpg" alt="ILLSTAR Welcome Banner">
+      </div>
+      <h2>CAPSULE 01: COMING SOON</h2>
+      <p>AUTHENTIC. RAW. UNFILTERED.</p>
+    </section>
+
+    <section id="products" class="products-grid reveal" aria-live="polite"></section>
+    
+  </main>
+
+  <!-- PRODUCT MODAL -->
+  <div id="modal" class="modal" aria-hidden="true"></div>
+
+  <!-- POLICY MODAL -->
+  <div id="policy-modal" class="modal" aria-hidden="true">
+    <div class="modal-content policy-content">
+      <button id="close-policy" class="close">×</button>
+      <div class="modal-info">
+        <h3>PRIVACY AND STORE POLICIES</h3>
+        <p>ILLSTAR aims to provide a transparent and trustworthy shopping experience.</p>
+        <p>By using our services, you agree to our terms and conditions.</p>
+        <h4>1. PAYMENTS</h4>
+        <p>We accept payments via Bank Transfer, Mobile Money and Cash.</p>
+        <p>Payment must be completed before the order is Processed and Delivered.</p> 
+        <h4>NOTE: WE ARE NOT RESPONSIBLE FOR PAYMENTS SENT TO INCORRECT ACCOUNT DETAILS</h4>
+        <h4>2. DELIVERY</h4>
+        <p>Orders are processed immediately after payment confirmation</p>
+        <p>Delivery time varies depending on your location:</p>
+        <p>- Local orders: Typically 1–5 business days.</p>
+        <p>- Regional orders: Typically 1–3 weeks.</p>
+        <p>- International orders: May take 1–2 months depending on customs and shipping conditions.</p>
+        <h4>3. REFUND POLICY</h4>
+        <h4>Refunds &amp; Exchanges</h4>
+        <p>- Customers may request a refund or exchange within 7 days of receiving their order</p>
+        <p>- Items must be unused, unworn, and in their original packaging.</p>
+        <h4>Damages &amp; Issues</h4>
+        <p>- If your item arrives damaged, defective, or incorrect, please contact us within 48 hours of delivery with photos of the issue.</p>
+        <p>- We will provide a replacement or full refund at no extra cost.</p>
+        <h4>REFUNDS WILL NOT BE ISSUED FOR ITEMS DAMAGED DUE TO IMPROPER USE OR HANDLING.</h4>
+        <h4>PRIVACY</h4>
+        <p>Customer information is used only for order processing and communication.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer id="footer" class="site-footer">
+    <div class="container footer-flex">
+      <div class="footer-left">
+          
+          <!-- GROUP: POLICIES + COPYRIGHT -->
+          <div class="footer-block">
+            <div class="footer-links">
+              <a href="https://www.instagram.com/illstarstudios" target="_blank" rel="noopener">
+                <img src="images/instagram.png" class="footer-social-icon"> Instagram</a>
+              <a href="#" class="footer-policy" data-policy="refund">Refund Policy</a>
+              <a href="#" class="footer-policy" data-policy="shipping">Shipping Policy</a>
+              <a href="#" class="footer-policy" data-policy="stockists">Stockists</a>
+              <a href="#" class="footer-policy" data-policy="privacy">Privacy Policy</a>
+              <a href="#" class="footer-policy" data-policy="contact">Contact Us</a>
+            </div>
+          </div>
+        
+      </div>
+        
+      <div class="footer-right">
+        <img src="images/logo2-dark.png" class="footer-logo footer-logo-dark">
+        <img src="images/logo2-light.png" class="footer-logo footer-logo-light">
+      </div>
+
+    </div>
+    <p class="footer-copy">© 2026 ILLSTAR STUDIOS</p>
+  </footer>
+
+  <!-- GLOBAL MODAL -->
+  <div id="global-modal" class="global-modal" aria-hidden="true">
+    <div class="global-modal-box">
+      <button class="close-global-modal" id="close-global-modal">✕</button>
+      <div id="global-modal-content"></div>
+    </div>
+  </div>
+      
+  <!-- ============================================================
+       CHECKOUT PAGE
+       ============================================================ -->
+  <div id="checkout-page" class="checkout-page hidden">
+
+    <!-- HEADER -->
+    <div class="co-header">
+      <button class="co-back-store-btn" id="co-back-to-store" title="Back to shop">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Shop
+      </button>
+      <a href="#" class="co-logo-center" id="co-logo-link">
+        <img src="images/logo-dark.png" class="co-logo logo-dark" alt="ILLSTAR">
+        <img src="images/logo-light.png" class="co-logo logo-light" alt="ILLSTAR">
+      </a>
+      <div style="width:80px;"></div>
+    </div>
+
+    <!-- SINGLE SCROLLABLE FORM -->
+    <div class="co-simple-body" id="co-main-form">
+
+      <!-- ① ORDER SUMMARY -->
+      <div class="co-section-block">
+        <h3 class="co-block-title">Order Summary</h3>
+        <div id="co-items" class="co-items-list"></div>
+        <div class="co-totals">
+          <!-- Physical pickup — shown only for Zambia/Lusaka users -->
+          <div class="co-pickup-row hidden" id="co-pickup-row">
+            <div class="co-pickup-toggle">
+              <div class="co-pickup-label">
+                <span class="co-pickup-icon">🏪</span>
+                <div>
+                  <strong>Physical Pickup — Lusaka Only</strong>
+                  <p>Physically collect from us. No shipping fee.</p>
+                </div>
+              </div>
+              <label class="co-toggle-switch">
+                <input type="checkbox" id="co-pickup-checkbox">
+                <span class="co-toggle-knob"></span>
+              </label>
+            </div>
+          </div>
+          <div class="co-total-row">
+            <span>Subtotal</span>
+            <span id="co-subtotal">K0.00</span>
+          </div>
+          <div class="co-total-row" id="co-shipping-row">
+            <span>Shipping cost</span>
+            <span id="co-shipping-display">K50.00</span>
+          </div>
+          <div class="co-total-row co-grand">
+            <span>Total</span>
+            <span id="co-grand-total">K0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② CONTACT DETAILS -->
+      <div class="co-section-block">
+        <h3 class="co-block-title">Contact Details</h3>
+
+        <div class="co-field">
+          <label>Email</label>
+          <input type="email" id="co-email" placeholder="you@example.com" />
+        </div>
+
+        <div class="co-field">
+          <label>Delivery — Country / Region</label>
+          <div class="co-select-wrap">
+            <select id="co-country">
+              <optgroup label="Africa">
+                <option value="ZM" selected>Zambia</option>
+                <option value="ZW">Zimbabwe</option>
+                <option value="ZA">South Africa</option>
+                <option value="BW">Botswana</option>
+                <option value="MZ">Mozambique</option>
+                <option value="MW">Malawi</option>
+                <option value="TZ">Tanzania</option>
+                <option value="KE">Kenya</option>
+                <option value="UG">Uganda</option>
+                <option value="RW">Rwanda</option>
+                <option value="ET">Ethiopia</option>
+                <option value="NG">Nigeria</option>
+                <option value="GH">Ghana</option>
+                <option value="SN">Senegal</option>
+                <option value="CI">Côte d'Ivoire</option>
+                <option value="CM">Cameroon</option>
+                <option value="CD">DR Congo</option>
+                <option value="AO">Angola</option>
+                <option value="NA">Namibia</option>
+                <option value="EG">Egypt</option>
+                <option value="MA">Morocco</option>
+                <option value="TN">Tunisia</option>
+                <option value="DZ">Algeria</option>
+              </optgroup>
+              <optgroup label="Europe">
+                <option value="GB">United Kingdom</option>
+                <option value="DE">Germany</option>
+                <option value="FR">France</option>
+                <option value="IT">Italy</option>
+                <option value="ES">Spain</option>
+                <option value="NL">Netherlands</option>
+                <option value="BE">Belgium</option>
+                <option value="CH">Switzerland</option>
+                <option value="SE">Sweden</option>
+                <option value="NO">Norway</option>
+                <option value="DK">Denmark</option>
+                <option value="PL">Poland</option>
+                <option value="PT">Portugal</option>
+                <option value="AT">Austria</option>
+                <option value="IE">Ireland</option>
+              </optgroup>
+              <optgroup label="Americas">
+                <option value="US">United States</option>
+                <option value="CA">Canada</option>
+                <option value="MX">Mexico</option>
+                <option value="BR">Brazil</option>
+                <option value="AR">Argentina</option>
+                <option value="CO">Colombia</option>
+                <option value="CL">Chile</option>
+              </optgroup>
+              <optgroup label="Asia &amp; Oceania">
+                <option value="CN">China</option>
+                <option value="JP">Japan</option>
+                <option value="IN">India</option>
+                <option value="AU">Australia</option>
+                <option value="NZ">New Zealand</option>
+                <option value="SG">Singapore</option>
+                <option value="AE">UAE</option>
+                <option value="SA">Saudi Arabia</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+
+        <div class="co-row-2">
+          <div class="co-field">
+            <label>First Name</label>
+            <input type="text" id="co-fname" placeholder="First name" />
+          </div>
+          <div class="co-field">
+            <label>Last Name</label>
+            <input type="text" id="co-lname" placeholder="Last name" />
+          </div>
+        </div>
+
+        <div class="co-field">
+          <label>Address</label>
+          <input type="text" id="co-address" placeholder="Street address" />
+        </div>
+
+        <div class="co-field">
+          <label>Contact Number</label>
+          <div id="co-contact-wrap"></div>
+        </div>
+
+        <div class="co-field">
+          <label>Province / City / Region</label>
+          <div class="co-field" id="province-field">
+            <!-- dynamically populated by updateProvinceVisibility() -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- ============================================================
+           PAYMENT SECTION 
+           ============================================================ -->
+      <div class="co-section-block">
+        <h3 class="co-block-title">Choose Payment Option</h3>
+
+        <div class="checkout-payment-panel">
+
+          <!-- SEGMENTED CONTROL (Tabs go here) -->
+          <div class="payment-type-toggle">
+            <button type="button" class="pay-tab active" data-tab="express">Express</button>
+            <button type="button" class="pay-tab" data-tab="mobile_money">Airtel / MTN Money</button>
+            <button type="button" class="pay-tab" data-tab="card">Card</button>
+          </div>
+
+          <!-- ── EXPRESS TAB ── -->
+          <div id="tab-express" class="pay-view active">
+            <div class="express-tiles">
+
+              <!-- PayPal -->
+              <div class="express-tile express-tile--soon">
+                <div class="express-tile-logo">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline;vertical-align:middle;margin-right:4px;">
+                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.291-.077.443-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.1z" fill="#009cde"/>
+                    <path d="M20.16 6.54c-.022.143-.047.29-.077.442-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.523 0-.967.382-1.05.9l-1.12 7.1-.32 2.033a.641.641 0 0 0 .633.74h4.44c.458 0 .849-.334.921-.787l.038-.197.732-4.638.047-.257c.072-.453.463-.787.92-.787h.58c3.755 0 6.693-1.527 7.549-5.944.358-1.84.173-3.376-.774-4.455a3.695 3.695 0 0 0-1.682-.948z" fill="#003087"/>
+                  </svg>
+                  <span class="express-tile-name">PayPal</span>
+                </div>
+                <span class="express-tile-soon-badge">Coming Soon</span>
+              </div>
+
+            </div><!-- /.express-tiles -->
+
+            <!-- Accepted cards row -->
+            <div class="accepted-section">
+              <span class="accepted-heading">ACCEPTED:</span>
+              <div class="accepted-brands">
+                <svg width="46" height="30" viewBox="0 0 780 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="780" height="500" rx="40" fill="#1A1F71"/>
+                  <text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-weight="700" font-size="240" fill="#fff" letter-spacing="-6">VISA</text>
+                </svg>
+                <svg width="46" height="30" viewBox="0 0 152 108" fill="none" xmlns="http://www.w3.org/2000/svg" style="background:#fff;border-radius:5px;padding:3px;box-sizing:border-box;">
+                  <circle cx="54" cy="54" r="54" fill="#EB001B"/>
+                  <circle cx="98" cy="54" r="54" fill="#F79E1B"/>
+                  <path d="M76 20.3A54 54 0 0 1 98 54 54 54 0 0 1 76 87.7 54 54 0 0 1 54 54 54 54 0 0 1 76 20.3z" fill="#FF5F00"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Card form fields -->
+            <div class="card-form">
+              <div class="input-group">
+                <label for="co-card-number">CARD NUMBER</label>
+                <div class="input-with-icon">
+                  <input type="text" id="co-card-number" class="co-card-input" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+                  <span id="card-type-icon"></span>
+                </div>
+              </div>
+              <div class="input-row">
+                <div class="input-group half">
+                  <label for="co-card-expiry">EXPIRATION DATE</label>
+                  <input type="text" id="co-card-expiry" class="co-card-input" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
+                </div>
+                <div class="input-group half">
+                  <label for="co-card-cvc">SECURITY CODE</label>
+                  <input type="text" id="co-card-cvc" class="co-card-input" placeholder="CVV" maxlength="4" autocomplete="cc-csc">
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="co-card-name">NAME ON CARD</label>
+                <input type="text" id="co-card-name" class="co-card-input" placeholder="Name on card" autocomplete="cc-name">
+              </div>
+            </div>
+          </div><!-- /#tab-express -->
+
+                    <!-- ── MOBILE MONEY TAB ── -->
+          <div id="tab-mobile_money" class="pay-view">
+            <div style="text-align: center; padding: 25px 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee; margin-top: 15px;">
+              <p style="font-size: 15px; margin-bottom: 20px;">Please send the <strong>exact total</strong> to <strong>either</strong> number below:</p>
+              
+              <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap;">
+                <!-- AIRTEL MONEY -->
+                <div style="background: #fff; padding: 15px 25px; border-radius: 8px; border: 1px solid #ddd; flex: 1; min-width: 200px;">
+                  <p style="font-weight: 800; color: #ed1c24; margin: 0 0 8px 0; font-size: 14px; letter-spacing: 1px;">AIRTEL MONEY</p>
+                  <p style="font-size: 24px; font-weight: bold; color: #111; margin: 0; letter-spacing: 1px;">0971 467 772</p>
+                  <p style="font-size: 12px; color: #888; margin: 5px 0 0 0;">Slyvia Mushumba</p>
+                </div>
+
+                <!-- MTN MOMO -->
+                <div style="background: #fff; padding: 15px 25px; border-radius: 8px; border: 1px solid #ddd; flex: 1; min-width: 200px;">
+                  <p style="font-weight: 800; color: #f5a623; margin: 0 0 8px 0; font-size: 14px; letter-spacing: 1px;">MTN MOMO</p>
+                  <!-- CHANGE THE NUMBER BELOW TO YOUR MTN NUMBER -->
+                  <p style="font-size: 24px; font-weight: bold; color: #111; margin: 0; letter-spacing: 1px;">0765 411 845</p>
+                  <p style="font-size: 12px; color: #888; margin: 5px 0 0 0;">Anthony Mushumba</p>
+                </div>
+              </div>
+
+              <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ddd;">
+              <p style="font-size: 14px; color: #333;">Once you have sent the money on your phone, click the button below to finalize your order.</p>
+              
+              <!-- PLACE ORDER BUTTON -->
+              <button id="co-submit-order" class="co-btn-primary" style="width: 100%; padding: 14px; font-size: 16px; cursor: pointer; border: none; border-radius: 4px; margin-top: 20px; font-weight: bold;">
+                PLACE ORDER
+              </button>
+            </div>
+          </div>
+
+          <!-- ── CARD TAB ── -->
+          <div id="tab-card" class="pay-view">
+            <div class="accepted-section">
+              <span class="accepted-heading">ACCEPTED:</span>
+              <div class="accepted-brands">
+                <svg width="46" height="30" viewBox="0 0 780 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="780" height="500" rx="40" fill="#1A1F71"/>
+                  <text x="50%" y="56%" dominant-baseline="middle" text-anchor="middle" font-family="Helvetica,Arial,sans-serif" font-weight="700" font-size="240" fill="#fff" letter-spacing="-6">VISA</text>
+                </svg>
+                <svg width="46" height="30" viewBox="0 0 152 108" fill="none" xmlns="http://www.w3.org/2000/svg" style="background:#fff;border-radius:5px;padding:3px;box-sizing:border-box;">
+                  <circle cx="54" cy="54" r="54" fill="#EB001B"/>
+                  <circle cx="98" cy="54" r="54" fill="#F79E1B"/>
+                  <path d="M76 20.3A54 54 0 0 1 98 54 54 54 0 0 1 76 87.7 54 54 0 0 1 54 54 54 54 0 0 1 76 20.3z" fill="#FF5F00"/>
+                </svg>
+              </div>
+            </div>
+            <div class="card-form">
+              <div class="input-group">
+                <label for="co-card-number-2">CARD NUMBER</label>
+                <div class="input-with-icon">
+                  <input type="text" id="co-card-number-2" class="co-card-input" placeholder="1234 5678 9012 3456" maxlength="19" autocomplete="cc-number">
+                  <span id="card-type-icon-2"></span>
+                </div>
+              </div>
+              <div class="input-row">
+                <div class="input-group half">
+                  <label for="co-card-expiry-2">EXPIRATION DATE</label>
+                  <input type="text" id="co-card-expiry-2" class="co-card-input" placeholder="MM/YY" maxlength="5" autocomplete="cc-exp">
+                </div>
+                <div class="input-group half">
+                  <label for="co-card-cvc-2">SECURITY CODE</label>
+                  <input type="text" id="co-card-cvc-2" class="co-card-input" placeholder="CVV" maxlength="4" autocomplete="cc-csc">
+                </div>
+              </div>
+              <div class="input-group">
+                <label for="co-card-name-2">NAME ON CARD</label>
+                <input type="text" id="co-card-name-2" class="co-card-input" placeholder="Name on card" autocomplete="cc-name">
+              </div>
+            </div>
+          </div><!-- /#tab-card -->
+
+        </div><!-- /.checkout-payment-panel -->
+      </div><!-- /.co-section-block -->
+
+      <!-- ④ CASH PAYMENT / DIRECT DMs -->
+      <div class="co-section-block">
+        <h3 class="co-block-title">Cash Payment / Direct DMs</h3>
+        <p class="co-dm-note">Send us your order details directly — we'll confirm and arrange payment manually.</p>
+
+        <div class="co-dm-grid">
+          <!-- WhatsApp -->
+          <button class="co-dm-btn co-dm-wa" id="co-pay-whatsapp">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            WhatsApp
+          </button>
+
+          <!-- Instagram -->
+          <button class="co-dm-btn co-dm-ig" id="co-pay-instagram">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </button>
+        </div>
+
+        <p class="co-policy-note">
+          <label class="co-policy-inline">
+            <input type="checkbox" id="co-policy-checkbox">
+            <span>
+              By placing an order you agree to our 
+              <a href="#footer" id="co-policy-link">store policies</a>.
+            </span>
+          </label>
+        </p>
+      </div>
+
+    </div><!-- end co-simple-body -->
+
+    <!-- CONFIRMATION SCREEN -->
+    <div class="co-confirm-screen hidden" id="co-confirm-screen">
+      <div class="co-confirm-icon">
+        <svg width="32" height="32" fill="none" stroke="#2d6a4f" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 class="co-confirm-title">Order Sent!</h2>
+      <p class="co-confirm-sub">We've received your details and will confirm your order via WhatsApp or Instagram shortly.</p>
+      <div class="co-order-ref" id="co-order-ref">ORDER #ILL-0001</div>
+      <button class="co-btn-primary" style="max-width:220px;margin:0 auto;" onclick="closeCheckoutPage()">
+        Continue Shopping
+      </button>
+    </div>
+
+  </div>
+  <!-- END CHECKOUT PAGE -->
+
+    <!-- ============================================================
+       ADMIN DASHBOARD
+       ============================================================ -->
+  <div id="admin-dashboard" class="admin-dashboard hidden">
+    
+    <div class="admin-header">
+      <button class="co-back-store-btn" id="admin-back-store" title="Back to shop">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Store
+      </button>
+      <div class="admin-logo-center">
+        <span class="admin-title">CEO DASHBOARD</span>
+      </div>
+      <button class="admin-logout-btn" id="admin-logout-btn">Logout</button>
+    </div>
+
+    <div class="admin-body">
+      
+            <!-- STATS GRID -->
+      <div class="admin-stats-grid" id="admin-stats-grid">
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Total Revenue</span>
+          <span class="admin-stat-value" id="stat-revenue">K0</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Active Orders</span>
+          <span class="admin-stat-value" id="stat-orders">0</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Pending</span>
+          <span class="admin-stat-value" id="stat-pending">0</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Total Users</span>
+          <span class="admin-stat-value" id="stat-users">0</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Active (30d)</span>
+          <span class="admin-stat-value" id="stat-active">0</span>
+        </div>
+        <div class="admin-stat-card">
+          <span class="admin-stat-label">Visitors (This Month)</span>
+          <span class="admin-stat-value" id="stat-visitors">0</span>
+        </div>
+      </div>
+
+      <!-- ORDERS TABLE -->
+      <div class="admin-section">
+        <h3 class="admin-section-title">Recent Orders</h3>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order Ref</th>
+                <th>Date</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Payment</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-orders-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PRODUCTS MANAGEMENT SECTION -->
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h3 class="admin-section-title" style="margin-bottom:0;">Products</h3>
+          <button class="admin-add-btn" id="admin-add-product-btn">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            Add Product
+          </button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table admin-products-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Price (ZMW)</th>
+                <th>Sizes</th>
+                <th>Colors</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="admin-products-tbody">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PRODUCT EDIT/ADD MODAL -->
+    <div id="admin-product-modal" class="admin-modal" aria-hidden="true">
+      <div class="admin-modal-box">
+        <div class="admin-modal-header">
+          <h3 id="admin-product-modal-title">Add Product</h3>
+          <button class="admin-modal-close" id="close-product-modal">✕</button>
+        </div>
+        <div class="admin-modal-body" id="admin-product-form-body">
+          <!-- Form will be populated by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- END ADMIN DASHBOARD -->
+
+  <!-- Load validation module BEFORE main script -->
+  <script src="validation.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
