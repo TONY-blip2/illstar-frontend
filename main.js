@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   //  STATE & CONSTANTS
   // ============================================================
 
-  const API       = 'http://localhost:5000/api';
+  const API       = 'https://illstar-backend.vercel.app/api';
   const WA_NUMBER = '260971467772';
 
   // ── TAB SWITCHING ──────────────────────────────────────────────
