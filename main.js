@@ -585,9 +585,21 @@ document.addEventListener('DOMContentLoaded', () => {
   //  PRODUCTS
   // ============================================================
 
-  async function loadProducts() {
+  async function loadProducts(attempt = 1) {
+    const container = document.getElementById('products');
+    const MAX_ATTEMPTS = 3;
+    const TIMEOUT_MS = 10000;
+
+    if (attempt === 1) {
+      container.innerHTML = '<p class="muted">Loading products…</p>';
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
     try {
-      const res  = await fetch(API + '/products');
+      const res  = await fetch(API + '/products', { signal: controller.signal });
+      clearTimeout(timer);
       const json = await res.json();
       products = json.data.map(p => ({
         id: p.id, name: p.name, image: p.image_url, backImage: p.back_image_url, images: p.extra_images || [],
@@ -600,8 +612,22 @@ document.addEventListener('DOMContentLoaded', () => {
       }));
       renderProducts();
     } catch (err) {
+      clearTimeout(timer);
       console.error(err);
-      document.getElementById('products').innerHTML = '<p class="muted">Failed to load products from server.</p>';
+      // Connection to the backend can be intermittently slow — retry a
+      // couple of times with a short delay before giving up, so a brief
+      // hiccup doesn't show the shopper a scary permanent error.
+      if (attempt < MAX_ATTEMPTS) {
+        container.innerHTML = `<p class="muted">Connection is slow, retrying…</p>`;
+        setTimeout(() => loadProducts(attempt + 1), attempt * 1500);
+      } else {
+        container.innerHTML = `
+          <div style="text-align:center;padding:40px 20px;">
+            <p class="muted" style="margin-bottom:16px;">Couldn't load products. Please check your connection.</p>
+            <button id="retry-products-btn" class="modal-btn" style="max-width:200px;margin:0 auto;">Retry</button>
+          </div>`;
+        document.getElementById('retry-products-btn')?.addEventListener('click', () => loadProducts(1));
+      }
     }
   }
 
