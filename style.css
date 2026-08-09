@@ -316,9 +316,9 @@ select {
   
   .card img {
     width: 100%;
-    aspect-ratio: 1/1;
+    height: auto;
     object-fit: contain;
-    background: #111;
+    background: var(--card);
     transition: transform 0.5s ease;
   }
   
@@ -3467,23 +3467,14 @@ body.light-mode .status-pending {
     gap: 18px;
   }
 
-  .footer-right { order: 1; width: auto; }
-  .footer-logo { height: 70px; }
+  .site-footer { flex-wrap: nowrap; }
+  .footer-right { order: 1; width: 100%; display: flex; justify-content: center; position: relative; height: 70px; }
+  .footer-logo { height: 70px; position: static; }
 
-  .footer-instagram-mobile {
-    display: flex;
-    order: 2;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    border-radius: 14px;
-    background: var(--white);
-  }
-  .footer-instagram-mobile .footer-social-icon { width: 24px; height: 24px; }
+  .footer-instagram-mobile { display: none; }
   .footer-instagram-desktop { display: none; }
 
-  #footer-currency-slot { order: 3; width: 100%; }
+  #footer-currency-slot { order: 2; width: 100%; }
   #footer-currency-slot .currency-selector { width: 100%; }
   #footer-currency-slot #currency-btn {
     justify-content: flex-start;
@@ -3491,14 +3482,13 @@ body.light-mode .status-pending {
     padding: 8px 0;
   }
 
-  .footer-copy { order: 4; width: 100%; text-align: left; margin-top: 0; }
+  .footer-copy { order: 3; width: 100%; text-align: left; margin-top: 0; }
 
-  .footer-left { order: 5; width: 100%; }
+  .footer-left { order: 4; width: 100%; }
   .footer-links { flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 10px 18px; }
 
   /* Product grid — single column, full-width cards */
   .products-grid { grid-template-columns: 1fr; gap: 28px; }
   .card-title { font-size: 15px; margin-top: 8px; }
   .card-price { font-size: 15px; }
-  .card img { aspect-ratio: 1/1.1; }
 }
