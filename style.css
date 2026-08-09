@@ -3454,7 +3454,7 @@ body.light-mode .status-pending {
 @media (max-width: 640px) {
 
   /* Header */
-  .logo-img { height: 95px; }
+  .logo-img { height: 115px; }
   .site-header { height: 110px; }
   .header-right { gap: 8px; }
   .cart-img { height: 20px; }
