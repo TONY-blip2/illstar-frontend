@@ -890,6 +890,27 @@ document.addEventListener('DOMContentLoaded', () => {
     currencyBtn.addEventListener('click', () => { currencyList.style.display = currencyList.style.display === 'block' ? 'none' : 'block'; });
     currencyList.querySelectorAll('li').forEach(item => { item.addEventListener('click', () => { setCurrency(item.dataset.symbol, parseFloat(item.dataset.rate)); currencyList.style.display = 'none'; }); });
     document.addEventListener('click', e => { if (!currencyBtn.contains(e.target) && !currencyList.contains(e.target)) currencyList.style.display = 'none'; });
+
+  // Physically relocate the currency selector between the header (desktop)
+  // and the footer (mobile) — same DOM node moved, not duplicated, so all
+  // the click handlers above keep working no matter where it currently sits.
+  const currencySelectorEl = document.querySelector('.currency-selector');
+  const footerCurrencySlot = document.getElementById('footer-currency-slot');
+  const headerRightEl = document.querySelector('.header-right');
+  const cartBoxEl = document.querySelector('.cart-box');
+
+  function relocateCurrencySelector(e) {
+    if (!currencySelectorEl || !footerCurrencySlot || !headerRightEl) return;
+    if (e.matches) {
+      footerCurrencySlot.appendChild(currencySelectorEl);
+    } else {
+      headerRightEl.insertBefore(currencySelectorEl, cartBoxEl);
+    }
+  }
+
+  const mobileMediaQuery = window.matchMedia('(max-width: 640px)');
+  relocateCurrencySelector(mobileMediaQuery);
+  mobileMediaQuery.addEventListener('change', relocateCurrencySelector);
   }
 
   const menuBtn     = document.getElementById('menu-btn');

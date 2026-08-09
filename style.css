@@ -3429,32 +3429,76 @@ body.light-mode .status-pending {
 }
 
 /* ============================================================
-   MOBILE FIXES — header/footer overlap, 2-column product grid
-   Only applies at phone widths; desktop layout is untouched.
+   FOOTER — flat flex layout so mobile can freely reorder pieces
+   (This replaces the site-footer default styling. Desktop keeps
+   its original look via the order values below; mobile overrides
+   happen inside the @media block further down.)
+   ============================================================ */
+.site-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+}
+.footer-instagram-mobile { display: none; }
+.footer-copy { width: 100%; order: 3; text-align: center; margin-top: 6px; }
+.footer-left  { order: 1; }
+.footer-right { order: 2; }
+
+/* ============================================================
+   MOBILE FIXES — header sizing, footer reorder, single-column
+   product grid. Only applies at phone widths; desktop untouched.
    ============================================================ */
 @media (max-width: 640px) {
 
-  /* Header — shrink the logo so it stops colliding with the
-     currency selector and cart icon on narrow screens */
+  /* Header */
   .logo-img { height: 60px; }
   .site-header { height: 70px; }
   .header-right { gap: 8px; }
-  #currency-btn { font-size: 12px; padding: 4px 6px; }
-  #currency-btn img { width: 14px; }
   .cart-img { height: 20px; }
 
-  /* Footer — .footer-right's logo images are position:absolute,
-     which means the parent collapses to 0 height and the logo
-     floats on top of the policy links below it. Give it real
-     height and stack things vertically instead. */
-  .footer-right { min-height: 60px; width: 100%; }
-  .footer-logo { height: 50px; }
-  .footer-flex { flex-direction: column; align-items: flex-start; gap: 14px; }
+  /* Footer — reordered to: logo, Instagram icon, currency, copyright, links */
+  .site-footer {
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 24px;
+    gap: 18px;
+  }
 
-  /* Product grid — force 2 columns instead of 1, since the
-     260px minimum card width doesn't fit twice on a ~390px
-     screen otherwise */
-  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .card-title { font-size: 13px; }
-  .card-price { font-size: 13px; }
+  .footer-right { order: 1; width: auto; }
+  .footer-logo { height: 70px; }
+
+  .footer-instagram-mobile {
+    display: flex;
+    order: 2;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--white);
+  }
+  .footer-instagram-mobile .footer-social-icon { width: 24px; height: 24px; }
+  .footer-instagram-desktop { display: none; }
+
+  #footer-currency-slot { order: 3; width: 100%; }
+  #footer-currency-slot .currency-selector { width: 100%; }
+  #footer-currency-slot #currency-btn {
+    justify-content: flex-start;
+    width: 100%;
+    padding: 8px 0;
+  }
+
+  .footer-copy { order: 4; width: 100%; text-align: left; margin-top: 0; }
+
+  .footer-left { order: 5; width: 100%; }
+  .footer-links { flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 10px 18px; }
+
+  /* Product grid — single column, full-width cards */
+  .products-grid { grid-template-columns: 1fr; gap: 28px; }
+  .card-title { font-size: 15px; margin-top: 8px; }
+  .card-price { font-size: 15px; }
+  .card img { aspect-ratio: 1/1.1; }
 }

@@ -151,31 +151,35 @@
   </div>
 
   <footer id="footer" class="site-footer">
-    <div class="container footer-flex">
-      <div class="footer-left">
-          
-          <!-- GROUP: POLICIES + COPYRIGHT -->
-          <div class="footer-block">
-            <div class="footer-links">
-              <a href="https://www.instagram.com/illstarstudios" target="_blank" rel="noopener">
-                <img src="images/instagram.png" class="footer-social-icon"> Instagram</a>
-              <a href="#" class="footer-policy" data-policy="refund">Refund Policy</a>
-              <a href="#" class="footer-policy" data-policy="shipping">Shipping Policy</a>
-              <a href="#" class="footer-policy" data-policy="stockists">Stockists</a>
-              <a href="#" class="footer-policy" data-policy="privacy">Privacy Policy</a>
-              <a href="#" class="footer-policy" data-policy="contact">Contact Us</a>
-            </div>
-          </div>
-        
-      </div>
-        
-      <div class="footer-right">
-        <img src="images/logo2-dark.png" class="footer-logo footer-logo-dark">
-        <img src="images/logo2-light.png" class="footer-logo footer-logo-light">
-      </div>
-
+    <div class="footer-right">
+      <img src="images/logo2-dark.png" class="footer-logo footer-logo-dark">
+      <img src="images/logo2-light.png" class="footer-logo footer-logo-light">
     </div>
+
+    <!-- Mobile-only standalone Instagram icon (desktop keeps the text+icon version below) -->
+    <a href="https://www.instagram.com/illstarstudios" target="_blank" rel="noopener" class="footer-instagram-mobile">
+      <img src="images/instagram.png" class="footer-social-icon">
+    </a>
+
+    <!-- The real currency selector gets physically moved in here on mobile by JS —
+         see the relocateCurrencySelector() addition in main.js -->
+    <div id="footer-currency-slot" class="footer-currency-slot"></div>
+
     <p class="footer-copy">© 2026 ILLSTAR STUDIOS</p>
+
+    <div class="footer-left">
+      <div class="footer-block">
+        <div class="footer-links">
+          <a href="https://www.instagram.com/illstarstudios" target="_blank" rel="noopener" class="footer-instagram-desktop">
+            <img src="images/instagram.png" class="footer-social-icon"> Instagram</a>
+          <a href="#" class="footer-policy" data-policy="refund">Refund Policy</a>
+          <a href="#" class="footer-policy" data-policy="shipping">Shipping Policy</a>
+          <a href="#" class="footer-policy" data-policy="stockists">Stockists</a>
+          <a href="#" class="footer-policy" data-policy="privacy">Privacy Policy</a>
+          <a href="#" class="footer-policy" data-policy="contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
   </footer>
 
   <!-- GLOBAL MODAL -->
