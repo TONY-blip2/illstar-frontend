@@ -981,7 +981,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('checkout-open');
     document.getElementById('co-main-form').style.display = '';
     document.getElementById('co-confirm-screen')?.classList.add('hidden');
-    updateProvinceVisibility(); coRenderItems(); setupCheckoutValidation();
+    updateProvinceVisibility(); coRenderItems(); setupCheckoutValidation(); refreshMmPanel();
     if (currentUser) {
       const parts = (currentUser.name || '').split(' ');
       const f = document.getElementById('co-fname'), l = document.getElementById('co-lname'), em = document.getElementById('co-email');
@@ -1787,6 +1787,71 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.overflow = '';
   };
 
+  // ============================================================
+  //  MOBILE MONEY PANEL — reference code, copy buttons, proof upload
+  // ============================================================
+  let mmOrderRef = null;
+  let mmProofFile = null;
+
+  function generateMmRef() {
+    const yr = new Date().getFullYear();
+    const rand = Math.floor(1000 + Math.random() * 9000);
+    return `ILL-${yr}-${rand}`;
+  }
+
+  function refreshMmPanel() {
+    mmOrderRef = generateMmRef();
+    const refEl = document.getElementById('mm-ref-code');
+    if (refEl) refEl.textContent = mmOrderRef;
+    const totalEl = document.getElementById('mm-total-amount');
+    if (totalEl) {
+      const subtotal = getSubtotalDisplay();
+      const shipping = calculateShipping();
+      totalEl.textContent = currentCurrency.symbol + (subtotal + shipping).toFixed(2);
+    }
+  }
+
+  // Regenerate whenever the checkout page opens or the mobile money tab is selected
+  document.querySelector('.pay-tab[data-tab="mobile_money"]')?.addEventListener('click', refreshMmPanel);
+
+  // Copy-to-clipboard for reference code and phone numbers
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.mm-copy-btn');
+    if (!btn) return;
+    const targetEl = document.getElementById(btn.dataset.copyTarget);
+    if (!targetEl) return;
+    navigator.clipboard.writeText(targetEl.textContent.trim()).then(() => {
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      btn.classList.add('mm-copied');
+      setTimeout(() => { btn.textContent = original; btn.classList.remove('mm-copied'); }, 1800);
+    }).catch(() => showToast('Could not copy — please copy it manually.', 'error'));
+  });
+
+  // Proof of payment file selection + preview
+  document.getElementById('mm-proof-input')?.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast('Image must be under 5MB.', 'error'); e.target.value = ''; return; }
+    mmProofFile = file;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const preview = document.getElementById('mm-proof-preview');
+      const wrap = document.getElementById('mm-proof-preview-wrap');
+      if (preview) preview.src = ev.target.result;
+      if (wrap) wrap.style.display = 'inline-block';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('mm-proof-remove')?.addEventListener('click', () => {
+    mmProofFile = null;
+    const input = document.getElementById('mm-proof-input');
+    const wrap = document.getElementById('mm-proof-preview-wrap');
+    if (input) input.value = '';
+    if (wrap) wrap.style.display = 'none';
+  });
+  
   document.getElementById('co-submit-order')?.addEventListener('click', async () => {
     if (!validateCheckoutForm()) return;
 

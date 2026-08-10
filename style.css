@@ -3492,3 +3492,111 @@ body.light-mode .status-pending {
   .card-title { font-size: 15px; margin-top: 8px; }
   .card-price { font-size: 15px; }
 }
+
+/* ============================================================
+   MOBILE MONEY PAYMENT PANEL
+   ============================================================ */
+.mm-panel {
+  text-align: left;
+  padding: 20px 16px;
+  background: var(--card);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+body.light-mode .mm-panel { border-color: rgba(0,0,0,0.08); }
+
+.mm-instruction { font-size: 14px; line-height: 1.6; margin: 0 0 16px; color: var(--white); }
+
+.mm-total-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,71,87,0.08);
+  border: 1px solid rgba(255,71,87,0.25);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+}
+.mm-total-label { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.mm-total-amount { font-size: 20px; font-weight: 800; color: var(--accent); }
+
+.mm-ref-box {
+  background: rgba(255,255,255,0.04);
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+body.light-mode .mm-ref-box { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.15); }
+.mm-ref-label { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); display: block; margin-bottom: 6px; }
+.mm-ref-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mm-ref-code { font-size: 16px; font-weight: 700; letter-spacing: 0.04em; color: var(--white); font-family: monospace; }
+.mm-ref-hint { font-size: 11px; color: var(--muted); margin: 6px 0 0; }
+
+.mm-copy-btn {
+  flex-shrink: 0;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+.mm-copy-btn:hover { opacity: 0.88; }
+.mm-copy-btn.mm-copied { background: #2ecc71; }
+
+.mm-numbers-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
+@media (min-width: 480px) {
+  .mm-numbers-grid { flex-direction: row; }
+}
+
+.mm-number-card {
+  flex: 1;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+body.light-mode .mm-number-card { background: #fff; border-color: rgba(0,0,0,0.1); }
+
+.mm-provider { font-weight: 800; font-size: 12px; letter-spacing: 0.06em; margin: 0 0 8px; }
+.mm-provider--airtel { color: #ed1c24; }
+.mm-provider--mtn { color: #f5a623; }
+
+.mm-number-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mm-number { font-size: 18px; font-weight: 700; color: var(--white); margin: 0; letter-spacing: 0.02em; }
+.mm-account-name { font-size: 11px; color: var(--muted); margin: 6px 0 0; }
+
+.mm-divider { margin: 18px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.1); }
+body.light-mode .mm-divider { border-top-color: rgba(0,0,0,0.1); }
+
+.mm-proof-section { margin-bottom: 16px; }
+.mm-proof-label { display: block; font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+.mm-proof-optional { font-weight: 400; color: var(--muted); font-size: 11px; }
+.mm-proof-file-input {
+  width: 100%;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 10px;
+  border: 1px dashed rgba(255,255,255,0.2);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.02);
+}
+body.light-mode .mm-proof-file-input { border-color: rgba(0,0,0,0.2); background: #fafafa; }
+
+.mm-proof-preview-wrap { margin-top: 10px; position: relative; display: inline-block; }
+.mm-proof-preview { max-width: 140px; max-height: 140px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); display: block; }
+.mm-proof-remove {
+  margin-top: 6px;
+  background: none;
+  border: none;
+  color: #ff4757;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mm-final-note { font-size: 13px; color: var(--muted); margin: 0 0 4px; }

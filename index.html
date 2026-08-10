@@ -424,27 +424,65 @@
             </div>
           </div><!-- /#tab-express -->
 
-                    <!-- ── MOBILE MONEY TAB ── -->
+          <!-- ── MOBILE MONEY TAB ── -->
           <div id="tab-mobile_money" class="pay-view">
-            <div style="text-align: center; padding: 25px 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #eee; margin-top: 15px;">
-              <p style="font-size: 15px; margin-bottom: 20px;">Please send the <strong>exact total</strong> to <strong>either</strong> number below:</p>
-              
-              <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; flex-wrap: wrap;">
-                <!-- AIRTEL MONEY -->
-                <div style="background: #fff; padding: 15px 25px; border-radius: 8px; border: 1px solid #ddd; flex: 1; min-width: 200px;">
-                  <p style="font-weight: 800; color: #ed1c24; margin: 0 0 8px 0; font-size: 14px; letter-spacing: 1px;">AIRTEL MONEY</p>
-                  <p style="font-size: 24px; font-weight: bold; color: #111; margin: 0; letter-spacing: 1px;">0971 467 772</p>
-                  <p style="font-size: 12px; color: #888; margin: 5px 0 0 0;">Slyvia Mushumba</p>
+            <div class="mm-panel">
+              <p class="mm-instruction">Send the <strong>exact total</strong> below to <strong>either</strong> number, using the reference code as your payment note if your mobile money app allows it.</p>
+
+              <div class="mm-total-box">
+                <span class="mm-total-label">Amount to send</span>
+                <span class="mm-total-amount" id="mm-total-amount">K0.00</span>
+              </div>
+
+              <div class="mm-ref-box">
+                <span class="mm-ref-label">Payment Reference</span>
+                <div class="mm-ref-row">
+                  <span class="mm-ref-code" id="mm-ref-code">—</span>
+                  <button type="button" class="mm-copy-btn" data-copy-target="mm-ref-code">Copy</button>
+                </div>
+                <p class="mm-ref-hint">Including this helps us match your payment and confirm your order faster.</p>
+              </div>
+
+              <div class="mm-numbers-grid">
+                <div class="mm-number-card">
+                  <p class="mm-provider mm-provider--airtel">AIRTEL MONEY</p>
+                  <div class="mm-number-row">
+                    <p class="mm-number" id="mm-airtel-number">0971 467 772</p>
+                    <button type="button" class="mm-copy-btn" data-copy-target="mm-airtel-number">Copy</button>
+                  </div>
+                  <p class="mm-account-name">Slyvia Mushumba</p>
                 </div>
 
-                <!-- MTN MOMO -->
-                <div style="background: #fff; padding: 15px 25px; border-radius: 8px; border: 1px solid #ddd; flex: 1; min-width: 200px;">
-                  <p style="font-weight: 800; color: #f5a623; margin: 0 0 8px 0; font-size: 14px; letter-spacing: 1px;">MTN MOMO</p>
-                  <!-- CHANGE THE NUMBER BELOW TO YOUR MTN NUMBER -->
-                  <p style="font-size: 24px; font-weight: bold; color: #111; margin: 0; letter-spacing: 1px;">0765 411 845</p>
-                  <p style="font-size: 12px; color: #888; margin: 5px 0 0 0;">Anthony Mushumba</p>
+                <div class="mm-number-card">
+                  <p class="mm-provider mm-provider--mtn">MTN MOMO</p>
+                  <div class="mm-number-row">
+                    <p class="mm-number" id="mm-mtn-number">0765 411 845</p>
+                    <button type="button" class="mm-copy-btn" data-copy-target="mm-mtn-number">Copy</button>
+                  </div>
+                  <p class="mm-account-name">Anthony Mushumba</p>
                 </div>
               </div>
+
+              <hr class="mm-divider">
+
+              <div class="mm-proof-section">
+                <label for="mm-proof-input" class="mm-proof-label">
+                  Upload proof of payment <span class="mm-proof-optional">(optional, speeds up confirmation)</span>
+                </label>
+                <input type="file" id="mm-proof-input" accept="image/*" class="mm-proof-file-input">
+                <div class="mm-proof-preview-wrap" id="mm-proof-preview-wrap" style="display:none;">
+                  <img id="mm-proof-preview" class="mm-proof-preview" alt="Payment screenshot preview">
+                  <button type="button" class="mm-proof-remove" id="mm-proof-remove">✕ Remove</button>
+                </div>
+              </div>
+
+              <p class="mm-final-note">Once you've sent the money, click below to finalize your order.</p>
+
+              <button id="co-submit-order" class="co-btn-primary">
+                PLACE ORDER
+              </button>
+            </div>
+          </div>
 
               <hr style="margin: 20px 0; border: 0; border-top: 1px solid #ddd;">
               <p style="font-size: 14px; color: #333;">Once you have sent the money on your phone, click the button below to finalize your order.</p>
