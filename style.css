@@ -2384,8 +2384,8 @@ body.light-mode .profile-cancel-btn { border-color: rgba(0,0,0,0.14); }
 @media (max-width: 600px) {
   .co-simple-body  { padding: 1.25rem 1rem 3rem; }
   .co-pay-grid     { grid-template-columns: repeat(2, 1fr); }
-  .co-header       { padding: 10px 14px; }
-  .co-logo         { height: 44px; }
+  .co-header       { padding: 10px 14px; height: 90px; }
+  .co-logo         { height: 150px; }
   .co-row-2        { grid-template-columns: 1fr; }
   .input-row       { grid-template-columns: 1fr; }
 }
