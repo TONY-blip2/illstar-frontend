@@ -1870,6 +1870,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // shopper happened to have selected while browsing.
     const subtotalZmw = cart.reduce((s, i) => s + i.baseZMW * i.qty, 0);
     const shippingZmw = currentCurrency.rate ? calculateShipping() / currentCurrency.rate : calculateShipping();
+    
+    // If a proof-of-payment screenshot was selected, upload it to Cloudinary
+    // first and get back a URL to attach to the order.
+    let proofUrl = null;
+    if (typeof mmProofFile !== 'undefined' && mmProofFile) {
+      try {
+        const proofForm = new FormData();
+        proofForm.append('proof', mmProofFile);
+        const proofRes = await fetch(`${API}/orders/upload-proof`, {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token },
+          body: proofForm,
+        });
+        const proofData = await proofRes.json();
+        if (proofRes.ok) proofUrl = proofData.data.url;
+      } catch (err) {
+        console.error('Proof upload failed:', err);
+        // Don't block the order over this — it's optional
+      }
+    }
 
     const orderPayload = {
       first_name: document.getElementById('co-fname')?.value,
@@ -1892,7 +1912,9 @@ document.addEventListener('DOMContentLoaded', () => {
       total_zmw: subtotalZmw + shippingZmw,
       currency_used: currentCode,
       payment_method: paymentMethod, 
-      is_pickup: pickupMode
+      is_pickup: pickupMode,
+      proof_of_payment_url: proofUrl,
+      client_ref: (typeof mmOrderRef !== 'undefined' && mmOrderRef) ? mmOrderRef : null,
     };
 
     try {
