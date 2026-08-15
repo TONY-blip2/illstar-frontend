@@ -1294,7 +1294,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${customer}</td>
                 <td>K${parseFloat(o.total_zmw).toFixed(2)}</td>
                 <td><span class="admin-badge ${statusBadgeClass}">${statusMeta.label}</span></td>
-                <td><span class="admin-badge ${payBadgeClass}">${o.payment_status}</span></td>
+                <td>
+                  <span class="admin-badge ${payBadgeClass}">${o.payment_status}</span>
+                  ${o.proof_of_payment_url ? `<br><a href="${o.proof_of_payment_url}" target="_blank" rel="noopener" title="View payment proof"><img src="${o.proof_of_payment_url}" class="admin-proof-thumb" alt="Payment proof"></a>` : ''}
+                </td>
                 <td class="admin-actions-cell">
                   <div style="margin-bottom:6px;"><span class="admin-badge ${statusBadgeClass}">${statusMeta.icon} ${statusMeta.label}</span></div>
                   ${actionButtons}

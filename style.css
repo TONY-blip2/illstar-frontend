@@ -3600,3 +3600,17 @@ body.light-mode .mm-proof-file-input { border-color: rgba(0,0,0,0.2); background
 }
 
 .mm-final-note { font-size: 13px; color: var(--muted); margin: 0 0 4px; }
+
+.admin-proof-thumb {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-top: 4px;
+  border: 1px solid rgba(255,255,255,0.15);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.admin-proof-thumb:hover { transform: scale(1.6); }
+body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
