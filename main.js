@@ -572,6 +572,23 @@ document.addEventListener('DOMContentLoaded', () => {
         await window.openAdminDashboard();
       } catch (err) { showToast(err.message, 'error'); }
       return;
+
+    if (e.target.classList.contains('admin-payment-btn')) {
+      const orderId = e.target.dataset.orderId;
+      if (!orderId) return;
+      if (!confirm('Mark this order as PAID?')) return;
+      try {
+        const res = await fetch(`${API}/orders/${orderId}/status`, {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+          body: JSON.stringify({ payment_status: 'paid' })
+        });
+        const data = await res.json(); if (!res.ok) throw new Error(data.message);
+        showToast('Order marked as paid.', 'success');
+        await window.openAdminDashboard();
+      } catch (err) { showToast(err.message, 'error'); }
+      return;
+    }
+    
     }
 
     // ---- CART CONTROLS ----
@@ -1297,6 +1314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>
                   <span class="admin-badge ${payBadgeClass}">${o.payment_status}</span>
                   ${o.proof_of_payment_url ? `<br><a href="${o.proof_of_payment_url}" target="_blank" rel="noopener" title="View payment proof"><img src="${o.proof_of_payment_url}" class="admin-proof-thumb" alt="Payment proof"></a>` : ''}
+                  ${o.payment_status === 'unpaid' ? `<br><button class="admin-payment-btn" data-order-id="${o.id}" style="margin-top:4px;background:#2ecc71;color:#fff;padding:3px 8px;border:none;border-radius:4px;cursor:pointer;font-size:11px;">Mark Paid</button>` : ''}
                 </td>
                 <td class="admin-actions-cell">
                   <div style="margin-bottom:6px;"><span class="admin-badge ${statusBadgeClass}">${statusMeta.icon} ${statusMeta.label}</span></div>
