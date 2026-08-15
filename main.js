@@ -569,7 +569,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const data = await res.json(); if (!res.ok) throw new Error(data.message);
         showToast(`Order updated to ${newStatus.toUpperCase()}`, 'success');
-        await loadAdminStats(); await loadAdminOrders();
+        await window.openAdminDashboard();
       } catch (err) { showToast(err.message, 'error'); }
       return;
     }
@@ -1408,12 +1408,10 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
           body: JSON.stringify({ order: newOrder })
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Failed to save order');
-        showToast('Product order saved.', 'success');
-        await loadProducts(); // keep the storefront grid in sync too
-      } catch (err) {
-        showToast('Failed to save order: ' + err.message, 'error');
+        const data = await res.json(); if (!res.ok) throw new Error(data.message);
+        showToast(`Order updated to ${newStatus.toUpperCase()}`, 'success');
+        await window.openAdminDashboard();
+      } catch (err) { showToast(err.message, 'error');
       }
     }
 
