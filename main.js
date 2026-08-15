@@ -572,6 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await window.openAdminDashboard();
       } catch (err) { showToast(err.message, 'error'); }
       return;
+    }  
 
     if (e.target.classList.contains('admin-payment-btn')) {
       const orderId = e.target.dataset.orderId;
@@ -589,7 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     
-    }
+    
 
     // ---- CART CONTROLS ----
     const cartKey = e.target.dataset.cartkey;
