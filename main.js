@@ -1326,7 +1326,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <tr>
                 <td>#${o.order_ref}</td>
                 <td>${date}</td>
-                <td>${customer}</td>
+                <td>
+                  ${customer}
+                  <br><span style="font-size:11px;color:var(--muted);">${o.email || ''}${o.phone ? ' · ' + o.phone : ''}</span>
+                </td>
                 <td>K${parseFloat(o.total_zmw).toFixed(2)}</td>
                 <td><span class="admin-badge ${statusBadgeClass}">${statusMeta.label}</span></td>
                 <td>
