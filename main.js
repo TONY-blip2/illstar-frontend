@@ -506,7 +506,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json()).then(data => {
         if (!data.success) { Validator.showError(emailEl, data.errors ? data.errors[0].message : data.message); return; }
         token = data.data.accessToken; localStorage.setItem('token', token);
-        currentUser = { name: fullName, email: emailR.value, role: data.data.user.role };
+        currentUser = { name: fullName, email: emailR.value, role: data.data.user.role, contact: phoneR.value };
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         showToast('Account created successfully!', 'success'); openGlobalModal('profile');
       }).catch(() => showToast('Network error', 'error')); return;
@@ -523,7 +523,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json()).then(data => {
         if (!data.success) { Validator.showError(emailEl, data.message || 'Invalid credentials'); return; }
         token = data.data.accessToken; localStorage.setItem('token', token);
-        currentUser = { name: data.data.user.email.split('@')[0], email: data.data.user.email, role: data.data.user.role };
+        const loginFullName = [data.data.user.first_name, data.data.user.last_name].filter(Boolean).join(' ') || data.data.user.email.split('@')[0];
+        currentUser = { name: loginFullName, email: data.data.user.email, role: data.data.user.role, contact: data.data.user.phone || '' };
         localStorage.setItem('currentUser', JSON.stringify(currentUser));
         showToast('Login successful!', 'success'); openGlobalModal('profile');
       }).catch(() => showToast('Network error', 'error')); return;
@@ -1004,6 +1005,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const parts = (currentUser.name || '').split(' ');
       const f = document.getElementById('co-fname'), l = document.getElementById('co-lname'), em = document.getElementById('co-email');
       if (f) f.value = parts[0] || ''; if (l) l.value = parts[1] || ''; if (em) em.value = currentUser.email || '';
+      if (currentUser.contact) {
+        const codeEl = document.getElementById('co-contact-code');
+        const numEl  = document.getElementById('co-contact');
+        if (codeEl && numEl) {
+          // Stored contact is a combined string like "+260971234567" —
+          // match the longest known country code prefix to split it back
+          // into the code dropdown + number field correctly.
+          const matchedCode = Object.keys(Validator.PHONE_RULES)
+            .sort((a, b) => b.length - a.length)
+            .find(code => currentUser.contact.startsWith(code));
+          if (matchedCode) {
+            codeEl.value = matchedCode;
+            numEl.value  = currentUser.contact.slice(matchedCode.length);
+          }
+        }
+      }
     }
   }
 
