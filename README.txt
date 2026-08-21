@@ -55,3 +55,87 @@ If you want, I can:
 
 "soldOut": true
 $env:DB_PASSWORD="rootpss"; npm run dev
+
+
+
+
+
+# ILLSTAR — Git Push Cheat Sheet
+
+## The one sequence you'll use 95% of the time
+
+Every time you finish making changes — whether it's code, images, anything — the process is always the same three commands:
+
+```
+git add .
+git commit -m "short description of what you changed"
+git push
+```
+
+That's it. `git add .` stages everything you changed, `git commit` saves a labeled checkpoint, `git push` sends it to GitHub (which then triggers your live site to update automatically).
+
+---
+
+## Which folder do I need to be in?
+
+This depends on WHAT you're changing:
+
+| You changed...                          | Open this folder in VS Code                          |
+|------------------------------------------|--------------------------------------------------------|
+| `index.html`, `main.js`, `style.css`, images | `ILLSTAR WEBSITE` (frontend)                        |
+| Anything in `src/` (controllers, routes, config) | `illstar-backend` (backend)                     |
+
+**Always double-check** which folder your terminal is actually pointed at before running these commands. Quick check:
+```
+Get-Location
+```
+This prints the current folder path — make sure it matches what you meant to edit.
+
+---
+
+## Good commit messages
+
+Doesn't need to be fancy — just a short note so future-you (or me) can tell what happened by skimming your history later:
+
+- `"Add new product images"`
+- `"Fix header logo size"`
+- `"Update shipping policy text"`
+
+---
+
+## What happens after you push
+
+- **Frontend** (`ILLSTAR WEBSITE` repo) → auto-deploys to both **Netlify** and **GitHub Pages**
+- **Backend** (`illstar-backend` repo) → auto-deploys to **Render**
+
+No extra steps needed — pushing to GitHub is the trigger for everything.
+
+---
+
+## Quick troubleshooting
+
+**"nothing to commit, working tree clean"**
+→ Totally fine — it just means there's nothing new to save. Either you already pushed this exact change, or you haven't actually saved the file in VS Code yet (check for the unsaved-changes dot on the file's tab).
+
+**Want to double-check a file actually has your edit before pushing?**
+```
+Select-String -Path FILENAME -Pattern "something you know is in your edit"
+```
+If it finds a match, your edit is really there.
+
+**Want to see what's about to be pushed?**
+```
+git status
+```
+Lists every file that's changed since your last commit.
+
+**Made a mistake in your last commit message? (rare, don't worry about this unless it happens)**
+```
+git commit --amend -m "corrected message"
+```
+
+---
+
+## The golden rule
+
+If something ever looks unexpected — an error you don't recognize, a page that looks broken after deploying, anything confusing — **stop and paste it to me** rather than guessing further. Copy the exact error text or take a screenshot. That's always faster to fix than trying to work around it blind.
