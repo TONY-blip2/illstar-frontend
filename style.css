@@ -69,6 +69,10 @@ body.light-mode {
 
 html { scroll-behavior: smooth; }
 
+@media (min-width: 641px) {
+  body { overflow-x: hidden; }
+}
+
 body {
   font-family: var(--font-main);
   font-size: var(--text-base);
@@ -3445,12 +3449,12 @@ body.light-mode .status-pending {
 .footer-instagram-mobile { display: none; }
 .footer-copy { width: 100%; order: 3; text-align: center; margin-top: 6px; }
 .footer-left  { order: 1; }
-.footer-right {
-  order: 2;
-  position: relative;
-  width: 140px;
-  height: 100px;
-  margin-right: 60px;
+@media (min-width: 641px) {
+  .footer-right {
+    position: relative;
+    width: 140px;
+    height: 100px;
+  }
 }
 
 /* ============================================================
