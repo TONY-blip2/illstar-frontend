@@ -800,22 +800,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     shipping: `
       <p><strong>Order Processing</strong></p>
-      <p>All orders are processed within 1-3 business days after payment confirmation (excluding weekends and public holidays). During high-demand periods or sales, processing may take slightly longer. You will receive a confirmation via WhatsApp or email once your order has been dispatched.</p>
+      <p>All orders are processed within <strong>1-3 business days after payment confirmation</strong> (excluding weekends and public holidays). During high-demand periods or sales, processing may take slightly longer. You will receive a confirmation via WhatsApp or email once your order has been dispatched.</p>
 
       <p><strong>Domestic Shipping (Zambia)</strong></p>
       <ul>
-        <li>Standard Delivery (Lusaka): 1-3 business days — ZMW 50</li>
-        <li>Standard Delivery (Other Provinces): 3-7 business days — ZMW 80-120</li>
-        <li>Express Delivery (Lusaka): Same day / Next day — ZMW 120</li>
+        <li>Standard Delivery (Lusaka): <strong>1-3 business days — ZMW 50</strong></li>
+        <li>Standard Delivery (Other Provinces): <strong>3-7 business days — ZMW 80-120</strong></li>
+        <li>Express Delivery (Lusaka): <strong>Same day / Next day — ZMW 120</strong></li>
       </ul>
       <p>Free standard shipping on all domestic orders over ZMW 800.</p>
 
       <p><strong>International Shipping</strong></p>
       <ul>
-        <li>Africa (SADC Region): 7-14 business days — From USD 15</li>
-        <li>Rest of Africa: 10-21 business days — From USD 25</li>
-        <li>Europe & North America: 14-28 business days — From USD 35</li>
-        <li>Rest of World: 14-35 business days — Calculated at checkout</li>
+        <li>Africa (SADC Region): <strong>7-14 business days — From USD 15</strong></li>
+        <li>Rest of Africa: <strong>10-21 business days — From USD 25</strong></li>
+        <li>Europe & North America: <strong>14-28 business days — From USD 35</strong></li>
+        <li>Rest of World: <strong>14-35 business days — Calculated at checkout</strong></li>
       </ul>
 
       <p><strong>Customs & Import Duties</strong></p>

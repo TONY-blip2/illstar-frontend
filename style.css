@@ -3445,7 +3445,13 @@ body.light-mode .status-pending {
 .footer-instagram-mobile { display: none; }
 .footer-copy { width: 100%; order: 3; text-align: center; margin-top: 6px; }
 .footer-left  { order: 1; }
-.footer-right { order: 2; }
+.footer-right {
+  order: 2;
+  position: relative;
+  width: 140px;
+  height: 100px;
+  margin-right: 60px;
+}
 
 /* ============================================================
    MOBILE FIXES — header sizing, footer reorder, single-column
