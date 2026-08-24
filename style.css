@@ -3463,6 +3463,15 @@ body.light-mode .status-pending {
    ============================================================ */
 @media (max-width: 640px) {
 
+  /* Full-bleed header and banner — content touches screen edges */
+  .header-flex { padding-left: 0; padding-right: 0; }
+  .welcome-banner {
+    margin-left: -20px;
+    margin-right: -20px;
+    width: calc(100% + 40px);
+  }
+  .welcome-banner img { width: 100%; display: block; }
+
   /* Header */
   .logo-img { height: 150px; }
   .site-header { height: 115px; }
