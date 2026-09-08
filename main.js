@@ -1997,6 +1997,119 @@ document.addEventListener('DOMContentLoaded', () => {
   // ============================================================
   //  INIT
   // ============================================================
+  // ============================================================
+  //  OPENING SOON — store status, countdown, drop signup
+  // ============================================================
+  let osCountdownInterval = null;
+
+  function osShowClosed() {
+    document.body.classList.add('store-closed');
+    document.getElementById('opening-soon-overlay')?.classList.add('active');
+  }
+
+  function osShowOpen() {
+    document.body.classList.remove('store-closed');
+    document.getElementById('opening-soon-overlay')?.classList.remove('active');
+    if (osCountdownInterval) { clearInterval(osCountdownInterval); osCountdownInterval = null; }
+  }
+
+  function osStartCountdown(dropAtISO) {
+    if (osCountdownInterval) clearInterval(osCountdownInterval);
+    const dropTime = new Date(dropAtISO).getTime();
+
+    function tick() {
+      const diff = dropTime - Date.now();
+      if (diff <= 0) {
+        clearInterval(osCountdownInterval);
+        osCountdownInterval = null;
+        // The countdown has reached zero on this visitor's clock — re-check
+        // with the server, which is what actually flips the store open and
+        // fires the launch email blast (see settingsController.js).
+        osCheckStoreStatus();
+        return;
+      }
+      const days  = Math.floor(diff / 86400000);
+      const hours = Math.floor((diff % 86400000) / 3600000);
+      const mins  = Math.floor((diff % 3600000) / 60000);
+      const secs  = Math.floor((diff % 60000) / 1000);
+      const pad = n => String(n).padStart(2, '0');
+      const dEl = document.getElementById('os-days'), hEl = document.getElementById('os-hours');
+      const mEl = document.getElementById('os-mins'), sEl = document.getElementById('os-secs');
+      if (dEl) dEl.textContent = pad(days);
+      if (hEl) hEl.textContent = pad(hours);
+      if (mEl) mEl.textContent = pad(mins);
+      if (sEl) sEl.textContent = pad(secs);
+    }
+
+    tick();
+    osCountdownInterval = setInterval(tick, 1000);
+  }
+
+  async function osCheckStoreStatus() {
+    // Logged-in admins always see the full shop, open or closed, so they
+    // can preview/test everything before a drop goes live.
+    if (currentUser && currentUser.role === 'admin') {
+      osShowOpen();
+      return;
+    }
+    try {
+      const res  = await fetch(`${API}/settings/status`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to check store status.');
+      const { is_open, drop_at } = data.data;
+      if (is_open) {
+        osShowOpen();
+      } else {
+        osShowClosed();
+        if (drop_at) osStartCountdown(drop_at);
+        else if (osCountdownInterval) { clearInterval(osCountdownInterval); osCountdownInterval = null; }
+      }
+    } catch (err) {
+      console.error('Store status check failed:', err);
+      // If we genuinely can't reach the backend, fail open rather than
+      // trapping visitors behind a broken overlay.
+      osShowOpen();
+    }
+  }
+
+  // Sign-up-for-drop modal wiring
+  document.getElementById('os-signup-btn')?.addEventListener('click', () => {
+    const modal = document.getElementById('drop-signup-modal');
+    modal.setAttribute('aria-hidden', 'false');
+    document.getElementById('drop-signup-msg').textContent = '';
+    document.getElementById('drop-signup-email').value = '';
+  });
+  document.getElementById('close-drop-signup')?.addEventListener('click', () => {
+    document.getElementById('drop-signup-modal').setAttribute('aria-hidden', 'true');
+  });
+  document.getElementById('drop-signup-submit')?.addEventListener('click', async () => {
+    const emailInput = document.getElementById('drop-signup-email');
+    const msgEl = document.getElementById('drop-signup-msg');
+    const email = emailInput.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msgEl.style.color = '#e74c3c';
+      msgEl.textContent = 'Please enter a valid email address.';
+      return;
+    }
+    try {
+      const res  = await fetch(`${API}/settings/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Something went wrong.');
+      msgEl.style.color = '#2ecc71';
+      msgEl.textContent = data.message || "You're on the list!";
+      emailInput.value = '';
+    } catch (err) {
+      msgEl.style.color = '#e74c3c';
+      msgEl.textContent = err.message;
+    }
+  });
+
+  // Run this on every page load, right away.
+  osCheckStoreStatus();
   loadProducts();
   renderCart();
 
