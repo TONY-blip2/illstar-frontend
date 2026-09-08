@@ -12,7 +12,32 @@
 </head>
 
 <body>
+  <!-- OPENING SOON OVERLAY — shown to regular visitors while the store is
+       closed. Logged-in admins always bypass this (see main.js). -->
+  <div id="opening-soon-overlay" class="opening-soon-overlay">
+    <img src="images/logo-light.png" class="os-logo" alt="ILLSTAR">
+    <h1 class="os-title">OPENING SOON</h1>
+    <div class="os-countdown" id="os-countdown">
+      <div class="os-countdown-unit"><span id="os-days">00</span><small>DAYS</small></div>
+      <div class="os-countdown-unit"><span id="os-hours">00</span><small>HOURS</small></div>
+      <div class="os-countdown-unit"><span id="os-mins">00</span><small>MINUTES</small></div>
+      <div class="os-countdown-unit"><span id="os-secs">00</span><small>SECONDS</small></div>
+    </div>
+    <button id="os-signup-btn" class="os-signup-btn">SIGN UP NOW</button>
+  </div>
 
+  <!-- SIGN UP FOR DROP NOTIFICATION MODAL -->
+  <div id="drop-signup-modal" class="modal" aria-hidden="true">
+    <div class="modal-content" style="max-width:420px;padding:32px;text-align:center;">
+      <button id="close-drop-signup" class="close">×</button>
+      <h2 style="margin-bottom:8px;">Get Notified</h2>
+      <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">Enter your email and we'll let you know the moment we launch.</p>
+      <input type="email" id="drop-signup-email" class="modal-input" placeholder="you@example.com">
+      <button id="drop-signup-submit" class="modal-btn">Sign Up</button>
+      <p id="drop-signup-msg" style="font-size:13px;margin-top:12px;"></p>
+    </div>
+  </div>
+  
   <!-- WORLDWIDE VISITOR TRACKER (Runs instantly for everyone) -->
   <script>
     (function(){

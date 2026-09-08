@@ -68,7 +68,7 @@ Every time you finish making changes — whether it's code, images, anything —
 
 ```
 git add .
-git commit -m "short description of what you changed"
+git commit -m "add jpg"
 git push
 ```
 
