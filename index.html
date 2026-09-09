@@ -639,6 +639,26 @@
           <span class="admin-stat-value" id="stat-visitors">0</span>
         </div>
       </div>
+      
+      <!-- STORE SETTINGS -->
+      <div class="admin-section">
+        <h3 class="admin-section-title">Store Settings</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;">
+          <div class="form-toggle-item">
+            <span>Store Open</span>
+            <label class="form-toggle-switch">
+              <input type="checkbox" id="admin-store-open-toggle">
+              <span class="form-toggle-slider"></span>
+            </label>
+          </div>
+          <div class="form-group">
+            <label for="admin-drop-datetime">Drop Date &amp; Time</label>
+            <input type="datetime-local" id="admin-drop-datetime" style="padding:10px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);color:var(--white);">
+          </div>
+          <button class="admin-add-btn" id="admin-save-settings-btn">Save Settings</button>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:12px;">Setting a drop date will automatically open the store and email everyone who signed up the moment it passes — no manual action needed.</p>
+      </div>
 
       <!-- ORDERS TABLE -->
       <div class="admin-section">

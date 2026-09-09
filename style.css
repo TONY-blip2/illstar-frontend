@@ -3655,6 +3655,7 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
   height: 90px;
   width: auto;
   margin-bottom: 32px;
+  filter: brightness(0) invert(1);
 }
 
 .os-title {
@@ -3709,7 +3710,7 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
 .os-signup-btn:active { transform: scale(0.97); }
 
 @media (max-width: 480px) {
-  .os-logo { height: 64px; margin-bottom: 24px; }
+    .os-logo { height: 64px; margin-bottom: 24px; filter: brightness(0) invert(1); }
   .os-title { font-size: 22px; }
   .os-countdown { gap: 12px; }
   .os-countdown-unit span { font-size: 28px; }
