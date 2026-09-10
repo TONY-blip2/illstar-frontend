@@ -1351,9 +1351,67 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("Dashboard stats error:", e);
   }
 
-  // CALL YOUR RICH PRODUCT LOADER
+   // CALL YOUR RICH PRODUCT LOADER
   await loadAdminProducts();
+  await loadAdminStoreSettings();
 };
+
+  // ============================================================
+  //  ADMIN — STORE SETTINGS (open/closed + drop date)
+  // ============================================================
+
+  // MySQL/TiDB returns DATETIME as "YYYY-MM-DD HH:mm:ss" (dateStrings:true
+  // in database.js). The <input type="datetime-local"> field needs
+  // "YYYY-MM-DDTHH:mm" instead — this converts one way...
+  function dbDatetimeToInputValue(dbDatetime) {
+    if (!dbDatetime) return '';
+    return dbDatetime.replace(' ', 'T').slice(0, 16);
+  }
+  // ...and this converts back, for sending to the backend.
+  function inputValueToDbDatetime(inputValue) {
+    if (!inputValue) return null;
+    return inputValue.replace('T', ' ') + ':00';
+  }
+
+  async function loadAdminStoreSettings() {
+    const toggleEl = document.getElementById('admin-store-open-toggle');
+    const dateEl   = document.getElementById('admin-drop-datetime');
+    if (!toggleEl || !dateEl) return;
+    try {
+      const res  = await fetch(`${API}/settings/status`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      toggleEl.checked = !!data.data.is_open;
+      dateEl.value = dbDatetimeToInputValue(data.data.drop_at);
+    } catch (err) {
+      console.error('Failed to load store settings:', err);
+    }
+  }
+
+  document.getElementById('admin-save-settings-btn')?.addEventListener('click', async () => {
+    const toggleEl = document.getElementById('admin-store-open-toggle');
+    const dateEl   = document.getElementById('admin-drop-datetime');
+    const btn      = document.getElementById('admin-save-settings-btn');
+    const original = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Saving...';
+    try {
+      const res  = await fetch(`${API}/settings`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({
+          is_open: toggleEl.checked,
+          drop_at: inputValueToDbDatetime(dateEl.value),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to save settings.');
+      showToast('Store settings saved.', 'success');
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      btn.disabled = false; btn.textContent = original;
+    }
+  });
 
   // ============================================================
   //  ADMIN PRODUCT MANAGEMENT
