@@ -3716,6 +3716,10 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
   .os-countdown-unit span { font-size: 28px; }
 }
 
+#drop-signup-modal.modal[aria-hidden="false"] {
+  z-index: 1000000;
+}
+
 /* Store closed — hide the actual shop chrome behind the overlay */
 body.store-closed .site-header,
 body.store-closed main,
