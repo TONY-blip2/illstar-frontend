@@ -1360,17 +1360,22 @@ document.addEventListener('DOMContentLoaded', () => {
   //  ADMIN — STORE SETTINGS (open/closed + drop date)
   // ============================================================
 
-  // MySQL/TiDB returns DATETIME as "YYYY-MM-DD HH:mm:ss" (dateStrings:true
-  // in database.js). The <input type="datetime-local"> field needs
-  // "YYYY-MM-DDTHH:mm" instead — this converts one way...
-  function dbDatetimeToInputValue(dbDatetime) {
+    function dbDatetimeToInputValue(dbDatetime) {
     if (!dbDatetime) return '';
-    return dbDatetime.replace(' ', 'T').slice(0, 16);
+    // Stored value is UTC with no timezone marker — parse it explicitly as
+    // UTC, then display using LOCAL date/time parts so the admin sees their
+    // own local time in the picker, not a raw UTC value.
+    const utcDate = new Date(dbDatetime.replace(' ', 'T') + 'Z');
+    const pad = n => String(n).padStart(2, '0');
+    return `${utcDate.getFullYear()}-${pad(utcDate.getMonth() + 1)}-${pad(utcDate.getDate())}T${pad(utcDate.getHours())}:${pad(utcDate.getMinutes())}`;
   }
-  // ...and this converts back, for sending to the backend.
   function inputValueToDbDatetime(inputValue) {
     if (!inputValue) return null;
-    return inputValue.replace('T', ' ') + ':00';
+    // The datetime-local input represents the admin's LOCAL time — the
+    // browser correctly parses it as local when we do new Date(inputValue).
+    // Convert it to a real UTC string before sending, so the server (which
+    // may run in a different timezone) always compares consistently.
+    return new Date(inputValue).toISOString().slice(0, 19).replace('T', ' ');
   }
 
   async function loadAdminStoreSettings() {
@@ -2071,9 +2076,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (osCountdownInterval) { clearInterval(osCountdownInterval); osCountdownInterval = null; }
   }
 
-  function osStartCountdown(dropAtISO) {
+    function osStartCountdown(dropAtISO) {
     if (osCountdownInterval) clearInterval(osCountdownInterval);
-    const dropTime = new Date(dropAtISO).getTime();
+    // Same fix — the stored value is UTC but has no 'Z' marker, so force
+    // UTC parsing explicitly rather than letting the browser guess.
+    const dropTime = new Date(dropAtISO.replace(' ', 'T') + 'Z').getTime();
 
     function tick() {
       const diff = dropTime - Date.now();
