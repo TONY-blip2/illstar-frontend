@@ -3651,11 +3651,20 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
 }
 .opening-soon-overlay.active { display: flex; }
 
-.os-logo {
-  height: 90px;
-  width: auto;
+.os-logo-wrap {
+  perspective: 800px;
   margin-bottom: 32px;
+}
+.os-logo {
+  height: 150px;
+  width: auto;
   filter: brightness(0) invert(1);
+  animation: os-spin-3d 4s linear infinite;
+}
+@keyframes os-spin-3d {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+
 }
 
 .os-title {
@@ -3710,7 +3719,8 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
 .os-signup-btn:active { transform: scale(0.97); }
 
 @media (max-width: 480px) {
-    .os-logo { height: 64px; margin-bottom: 24px; filter: brightness(0) invert(1); }
+  .os-logo-wrap { margin-bottom: 24px; }
+  .os-logo { height: 100px; }
   .os-title { font-size: 22px; }
   .os-countdown { gap: 12px; }
   .os-countdown-unit span { font-size: 28px; }
