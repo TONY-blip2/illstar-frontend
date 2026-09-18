@@ -3651,22 +3651,12 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
 }
 .opening-soon-overlay.active { display: flex; }
 
-.os-logo-wrap {
-  perspective: 800px;
-  margin-bottom: 32px;
+.os-logo-3d-container {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 32px;
 }
-.os-logo {
-  height: 150px;
-  width: auto;
-  animation: os-spin-3d 4s linear infinite;
-}
-@keyframes os-spin-3d {
-  0%   { transform: rotateX(18deg) rotateY(0deg);   filter: brightness(0) invert(1) drop-shadow(0 10px 14px rgba(255,255,255,0.06)); }
-  25%  { transform: rotateX(18deg) rotateY(90deg);  filter: brightness(0) invert(1) drop-shadow(12px 4px 18px rgba(255,255,255,0.22)); }
-  50%  { transform: rotateX(18deg) rotateY(180deg); filter: brightness(0) invert(1) drop-shadow(0 10px 14px rgba(255,255,255,0.06)); }
-  75%  { transform: rotateX(18deg) rotateY(270deg); filter: brightness(0) invert(1) drop-shadow(-12px 4px 18px rgba(255,255,255,0.22)); }
-  100% { transform: rotateX(18deg) rotateY(360deg); filter: brightness(0) invert(1) drop-shadow(0 10px 14px rgba(255,255,255,0.06)); }
-}
+.os-logo-3d-container canvas { display: block; }
 
 .os-title {
   color: #fff;
@@ -3720,8 +3710,7 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
 .os-signup-btn:active { transform: scale(0.97); }
 
 @media (max-width: 480px) {
-  .os-logo-wrap { margin-bottom: 24px; }
-  .os-logo { height: 100px; }
+  .os-logo-3d-container { width: 150px; height: 150px; margin: 0 auto 24px; }
   .os-title { font-size: 22px; }
   .os-countdown { gap: 12px; }
   .os-countdown-unit span { font-size: 28px; }

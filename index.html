@@ -15,9 +15,7 @@
   <!-- OPENING SOON OVERLAY — shown to regular visitors while the store is
        closed. Logged-in admins always bypass this (see main.js). -->
   <div id="opening-soon-overlay" class="opening-soon-overlay">
-        <div class="os-logo-wrap">
-      <img src="images/opening-soon-logo.png" class="os-logo" alt="ILLSTAR">
-    </div>
+      <div id="os-logo-3d" class="os-logo-3d-container"></div>
     <h1 class="os-title">OPENING SOON</h1>
     <div class="os-countdown" id="os-countdown">
       <div class="os-countdown-unit"><span id="os-days">00</span><small>DAYS</small></div>
@@ -732,6 +730,8 @@
   </div>
   <!-- END ADMIN DASHBOARD -->
 
+    <!-- Three.js — powers the real 3D spinning logo on the Opening Soon screen -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <!-- Load validation module BEFORE main script -->
   <script src="validation.js"></script>
   <script src="main.js"></script>
