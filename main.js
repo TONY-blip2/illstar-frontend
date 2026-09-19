@@ -2173,6 +2173,79 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // ============================================================
+  //  OPENING SOON — real 3D spinning logo (Three.js)
+  //  A thin disc, textured on both flat faces with the logo, spinning
+  //  around a true vertical axis — the rim is what's actually visible
+  //  turning, giving genuine depth rather than a flat image faking it.
+  // ============================================================
+  function initOpeningSoon3DLogo() {
+    const container = document.getElementById('os-logo-3d');
+    if (!container || typeof THREE === 'undefined') return;
+
+    const size = container.clientWidth || 220;
+
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+    camera.position.set(0, 0, 6);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    renderer.setSize(size, size);
+    container.appendChild(renderer.domElement);
+
+    // Lighting positioned so the rim catches highlights as it turns —
+    // this is what actually sells the "chrome edge" look on the sides.
+    scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
+    keyLight.position.set(3, 4, 5);
+    scene.add(keyLight);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    rimLight.position.set(-4, -2, 3);
+    scene.add(rimLight);
+
+    const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
+
+    // A thin coin/medallion shape. CylinderGeometry's axis defaults to Y
+    // (like a can standing upright) — rotateX bakes in a reorientation so
+    // the flat faces point at the camera instead, WITHOUT affecting the
+    // spin animation below, which then rotates purely around the true
+    // vertical (world Y) axis.
+    const geometry = new THREE.CylinderGeometry(1.6, 1.6, 0.22, 64);
+    geometry.rotateX(Math.PI / 2);
+
+    const faceMaterial = new THREE.MeshStandardMaterial({
+      map: texture,
+      transparent: true,
+      metalness: 0.15,
+      roughness: 0.35,
+    });
+    const rimMaterial = new THREE.MeshStandardMaterial({
+      color: 0xd8d8de,
+      metalness: 0.9,
+      roughness: 0.25,
+    });
+
+    // CylinderGeometry material group order is [side, top, bottom].
+    const disc = new THREE.Mesh(geometry, [rimMaterial, faceMaterial, faceMaterial]);
+    scene.add(disc);
+
+    function animate() {
+      requestAnimationFrame(animate);
+      // Constant linear speed, vertical axis only — no easing, no bounce.
+      disc.rotation.y += 0.018;
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      const newSize = container.clientWidth || size;
+      renderer.setSize(newSize, newSize);
+    });
+  }
+
+  initOpeningSoon3DLogo();
+
   // Run this on every page load, right away.
   osCheckStoreStatus();
   loadProducts();
