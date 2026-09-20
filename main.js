@@ -2214,12 +2214,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const geometry = new THREE.CylinderGeometry(1.6, 1.6, 0.22, 64);
     geometry.rotateX(Math.PI / 2);
 
-    const faceMaterial = new THREE.MeshStandardMaterial({
-      map: texture,
-      transparent: true,
-      metalness: 0.15,
-      roughness: 0.35,
+    const faceMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+    transparent: true,
     });
+
     const rimMaterial = new THREE.MeshStandardMaterial({
       color: 0xd8d8de,
       metalness: 0.9,
