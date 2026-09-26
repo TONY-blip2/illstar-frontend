@@ -2209,7 +2209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // mapping reads on the flat cap faces — this rotates the texture
     // itself back to upright to compensate.
     texture.center.set(0.5, 0.5);
-    texture.rotation = Math.PI / 2;
+    texture.rotation = -Math.PI / 2;
 
     // A thin coin/medallion shape. CylinderGeometry's axis defaults to Y
     // (like a can standing upright) — rotateX bakes in a reorientation so
