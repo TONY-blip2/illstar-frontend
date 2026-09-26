@@ -2205,6 +2205,11 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(rimLight);
 
     const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
+    // Reorienting the geometry above (rotateX) also rotates how the UV
+    // mapping reads on the flat cap faces — this rotates the texture
+    // itself back to upright to compensate.
+    texture.center.set(0.5, 0.5);
+    texture.rotation = Math.PI / 2;
 
     // A thin coin/medallion shape. CylinderGeometry's axis defaults to Y
     // (like a can standing upright) — rotateX bakes in a reorientation so
