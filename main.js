@@ -2220,10 +2220,9 @@ document.addEventListener('DOMContentLoaded', () => {
     geometry.rotateX(Math.PI / 2);
 
     const faceMaterial = new THREE.MeshBasicMaterial({
-    map: texture,
-    transparent: true,
+      map: texture,
+      transparent: true,
     });
-
     const rimMaterial = new THREE.MeshStandardMaterial({
       color: 0xd8d8de,
       metalness: 0.9,
