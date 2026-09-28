@@ -2205,10 +2205,11 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(rimLight);
 
     const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
-    // Front face is rendering upside down — a clean 180° flip about center
-    // corrects this without reintroducing the sideways issue from before.
-    texture.center.set(0.5, 0.5);
-    texture.rotation = Math.PI;
+    // Three.js loads textures with an automatic vertical flip by default
+    // (a WebGL convention) — that flip, not rotation, was the actual cause
+    // of the wrong orientation. This disables that default flip so the
+    // image displays in its natural orientation.
+    texture.flipY = false;
 
     // A thin square card instead of a round cylinder — BoxGeometry's
 
