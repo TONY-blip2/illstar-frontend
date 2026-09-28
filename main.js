@@ -2205,11 +2205,12 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(rimLight);
 
     const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
-    // Reorienting the geometry above (rotateX) also rotates how the UV
-    // mapping reads on the flat cap faces — this rotates the texture
-    // itself back to upright to compensate.
+    // Front face is rendering upside down — a clean 180° flip about center
+    // corrects this without reintroducing the sideways issue from before.
     texture.center.set(0.5, 0.5);
-    texture.rotation = -Math.PI / 2;
+    texture.rotation = Math.PI;
+
+    // A thin square card instead of a round cylinder — BoxGeometry's
 
     // A thin coin/medallion shape. CylinderGeometry's axis defaults to Y
     // (like a can standing upright) — rotateX bakes in a reorientation so
