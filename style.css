@@ -3727,8 +3727,3 @@ body.store-closed .site-footer,
 body.store-closed .cart-panel {
   display: none !important;
 }
-
-/* Fix sideways Opening Soon logo */
-img[src*="opening-soon-logo"] {
-  transform: rotate(90deg);
-}
