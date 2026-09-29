@@ -2211,7 +2211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // leaving the left-right placement exactly as it should be.
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.y = -2;
+    texture.repeat.y = -1;
 
     // A thin square card instead of a round cylinder — BoxGeometry's
 
