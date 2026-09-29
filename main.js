@@ -2205,11 +2205,13 @@ document.addEventListener('DOMContentLoaded', () => {
     scene.add(rimLight);
 
     const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
-    // Three.js loads textures with an automatic vertical flip by default
-    // (a WebGL convention) — that flip, not rotation, was the actual cause
-    // of the wrong orientation. This disables that default flip so the
-    // image displays in its natural orientation.
-    texture.flipY = false;
+    // The image needs a vertical MIRROR (top-to-bottom flip), not a
+    // rotation — rotating also swaps left/right, which is what kept
+    // putting the star on the wrong side. This flips only up/down,
+    // leaving the left-right placement exactly as it should be.
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.y = -1;
 
     // A thin square card instead of a round cylinder — BoxGeometry's
 
