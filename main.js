@@ -2204,24 +2204,12 @@ document.addEventListener('DOMContentLoaded', () => {
     rimLight.position.set(-4, -2, 3);
     scene.add(rimLight);
 
-    const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
-    // The image needs a vertical MIRROR (top-to-bottom flip), not a
-    // rotation — rotating also swaps left/right, which is what kept
-    // putting the star on the wrong side. This flips only up/down,
-    // leaving the left-right placement exactly as it should be.
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.y = -1;
+        const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
 
-    // A thin square card instead of a round cylinder — BoxGeometry's
-
-    // A thin coin/medallion shape. CylinderGeometry's axis defaults to Y
-    // (like a can standing upright) — rotateX bakes in a reorientation so
-    // the flat faces point at the camera instead, WITHOUT affecting the
-    // spin animation below, which then rotates purely around the true
-    // vertical (world Y) axis.
-    const geometry = new THREE.CylinderGeometry(1.6, 1.6, 0.22, 64);
-    geometry.rotateX(Math.PI / 2);
+    // A thin square card — BoxGeometry's front/back faces use standard,
+    // simple texture mapping (same as a normal image), so no rotation or
+    // flip tricks are needed at all.
+    const geometry = new THREE.BoxGeometry(2.8, 2.8, 0.22);
 
     const faceMaterial = new THREE.MeshBasicMaterial({
       map: texture,
@@ -2233,8 +2221,12 @@ document.addEventListener('DOMContentLoaded', () => {
       roughness: 0.25,
     });
 
-    // CylinderGeometry material group order is [side, top, bottom].
-    const disc = new THREE.Mesh(geometry, [rimMaterial, faceMaterial, faceMaterial]);
+    // BoxGeometry material group order: [+x, -x, +y, -y, +z, -z]
+    // = [right, left, top, bottom, front, back].
+    const disc = new THREE.Mesh(geometry, [
+      rimMaterial, rimMaterial, rimMaterial, rimMaterial,
+      faceMaterial, faceMaterial,
+    ]);
     scene.add(disc);
 
     function animate() {
