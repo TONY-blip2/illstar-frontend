@@ -2204,35 +2204,41 @@ document.addEventListener('DOMContentLoaded', () => {
     rimLight.position.set(-4, -2, 3);
     scene.add(rimLight);
 
-        const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
+      const texture = new THREE.TextureLoader().load('images/opening-soon-logo-white.png');
 
-    // A thin square card — BoxGeometry's front/back faces use standard,
-    // simple texture mapping (same as a normal image), so no rotation or
-    // flip tricks are needed at all.
-    const geometry = new THREE.BoxGeometry(2.8, 2.8, 0.22);
+    const radius = 1.6;
+    const depth  = 0.22;
 
-    const faceMaterial = new THREE.MeshBasicMaterial({
-      map: texture,
-      transparent: true,
-    });
-    const rimMaterial = new THREE.MeshStandardMaterial({
-      color: 0xd8d8de,
-      metalness: 0.9,
-      roughness: 0.25,
-    });
+    const faceMaterial = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+    const rimMaterial  = new THREE.MeshStandardMaterial({ color: 0xd8d8de, metalness: 0.9, roughness: 0.25 });
 
-    // BoxGeometry material group order: [+x, -x, +y, -y, +z, -z]
-    // = [right, left, top, bottom, front, back].
-    const disc = new THREE.Mesh(geometry, [
-      rimMaterial, rimMaterial, rimMaterial, rimMaterial,
-      faceMaterial, faceMaterial,
-    ]);
-    scene.add(disc);
+    const group = new THREE.Group();
+
+    // Front face — a flat circle facing +Z by default, the same "zero
+    // rotation needed" orientation that already rendered correctly.
+    const front = new THREE.Mesh(new THREE.CircleGeometry(radius, 64), faceMaterial);
+    front.position.z = depth / 2;
+    group.add(front);
+
+    // Back face — identical, just flipped to face -Z.
+    const back = new THREE.Mesh(new THREE.CircleGeometry(radius, 64), faceMaterial);
+    back.position.z = -depth / 2;
+    back.rotation.y = Math.PI;
+    group.add(back);
+
+    // Rim — a hollow tube with NO end caps (openEnded: true), so there's
+    // no textured cap UV to worry about at all — just the round metal edge.
+    const rimGeometry = new THREE.CylinderGeometry(radius, radius, depth, 64, 1, true);
+    rimGeometry.rotateX(Math.PI / 2);
+    const rim = new THREE.Mesh(rimGeometry, rimMaterial);
+    group.add(rim);
+
+    scene.add(group);
 
     function animate() {
       requestAnimationFrame(animate);
       // Constant linear speed, vertical axis only — no easing, no bounce.
-      disc.rotation.y += 0.018;
+      group.rotation.y += 0.018;
       renderer.render(scene, camera);
     }
     animate();
