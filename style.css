@@ -3727,3 +3727,147 @@ body.store-closed .site-footer,
 body.store-closed .cart-panel {
   display: none !important;
 }
+
+/* ============================================================
+   STORE SETTINGS — premium panel
+   ============================================================ */
+.store-settings-section {
+  background: linear-gradient(165deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+  position: relative;
+  overflow: hidden;
+}
+.store-settings-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+}
+body.light-mode .store-settings-section {
+  background: linear-gradient(165deg, rgba(0,0,0,0.025), rgba(0,0,0,0.01));
+}
+body.light-mode .store-settings-section::before {
+  background: linear-gradient(90deg, transparent, rgba(0,0,0,0.12), transparent);
+}
+
+.store-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 26px;
+  align-items: end;
+  margin-bottom: 4px;
+}
+
+/* Status indicator */
+.store-settings-status { display: flex; flex-direction: column; gap: 10px; }
+.store-settings-status-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.store-settings-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 10px 18px;
+  border-radius: 30px;
+  width: fit-content;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+.store-settings-status-badge--closed {
+  background: rgba(231,76,60,0.1);
+  color: #ff6b5e;
+  border: 1px solid rgba(231,76,60,0.3);
+  box-shadow: 0 0 18px rgba(231,76,60,0.08);
+}
+.store-settings-status-badge--open {
+  background: rgba(46,204,113,0.1);
+  color: #3ee685;
+  border: 1px solid rgba(46,204,113,0.35);
+  box-shadow: 0 0 18px rgba(46,204,113,0.12);
+}
+.store-status-dot {
+  width: 9px; height: 9px; border-radius: 50%; display: inline-block;
+  box-shadow: 0 0 8px currentColor;
+}
+.store-status-dot--closed { background: #ff6b5e; color: #ff6b5e; }
+.store-status-dot--open   { background: #3ee685; color: #3ee685;
+  animation: store-status-pulse 2s ease-in-out infinite; }
+@keyframes store-status-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+/* Date field */
+.store-settings-field { display: flex; flex-direction: column; gap: 10px; }
+.store-settings-field label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 700;
+}
+.store-settings-input {
+  padding: 13px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  color: var(--white);
+  font-size: 14px;
+  font-family: var(--font-main);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.store-settings-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255,46,46,0.12);
+}
+body.light-mode .store-settings-input {
+  background: #fff;
+  border-color: #e0ddd8;
+  color: #1a1a1a;
+}
+
+/* Toggle */
+.store-settings-toggle-wrap { display: flex; flex-direction: column; gap: 10px; }
+.store-settings-toggle-wrap > span:first-child {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+/* Save button */
+.store-settings-save {
+  height: 46px;
+  padding: 0 28px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #c21f1f);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(255,46,46,0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+.store-settings-save:hover  { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(255,46,46,0.35); }
+.store-settings-save:active { transform: translateY(0) scale(0.98); }
+.store-settings-save:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.store-settings-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 18px;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  max-width: 560px;
+}

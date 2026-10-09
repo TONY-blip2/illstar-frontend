@@ -68,7 +68,7 @@ Every time you finish making changes — whether it's code, images, anything —
 
 ```
 git add .
-git commit -m "Clean fix: pure BoxGeometry with no texture transforms"
+git commit -m "update new image"
 git push
 ```
 

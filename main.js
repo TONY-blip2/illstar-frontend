@@ -1378,6 +1378,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return new Date(inputValue).toISOString().slice(0, 19).replace('T', ' ');
   }
 
+    function updateStoreStatusBadge(isOpen) {
+    const badge = document.getElementById('store-status-badge');
+    if (!badge) return;
+    badge.className = 'store-settings-status-badge ' +
+      (isOpen ? 'store-settings-status-badge--open' : 'store-settings-status-badge--closed');
+    badge.innerHTML = isOpen
+      ? '<span class="store-status-dot store-status-dot--open"></span> Open'
+      : '<span class="store-status-dot store-status-dot--closed"></span> Closed';
+  }
+
   async function loadAdminStoreSettings() {
     const toggleEl = document.getElementById('admin-store-open-toggle');
     const dateEl   = document.getElementById('admin-drop-datetime');
@@ -1388,10 +1398,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) throw new Error(data.message);
       toggleEl.checked = !!data.data.is_open;
       dateEl.value = dbDatetimeToInputValue(data.data.drop_at);
+      updateStoreStatusBadge(!!data.data.is_open);
     } catch (err) {
       console.error('Failed to load store settings:', err);
     }
   }
+
+  // Live preview: the badge follows the toggle as you flip it (it only
+  // becomes real once you click Save Settings).
+  document.getElementById('admin-store-open-toggle')?.addEventListener('change', e => {
+    updateStoreStatusBadge(e.target.checked);
+  });
 
   document.getElementById('admin-save-settings-btn')?.addEventListener('click', async () => {
     const toggleEl = document.getElementById('admin-store-open-toggle');
@@ -1411,6 +1428,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to save settings.');
       showToast('Store settings saved.', 'success');
+      updateStoreStatusBadge(toggleEl.checked);
     } catch (err) {
       showToast(err.message, 'error');
     } finally {
