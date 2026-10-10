@@ -3450,10 +3450,43 @@ body.light-mode .status-pending {
 .footer-copy { width: 100%; order: 3; text-align: center; margin-top: 6px; }
 .footer-left  { order: 1; }
 @media (min-width: 641px) {
+  .site-footer {
+    position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    padding: 28px 20px;
+    min-height: 140px;
+  }
+
+  /* Logo pinned to the left, vertically centered in the footer */
+  .footer-right {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100px;
+    height: 100px;
+  }
+
+  /* Links centered, then the copyright directly underneath */
+  .footer-left  { order: 1; width: 100%; }
+  .footer-copy  { order: 2; margin-top: 0; }
+  .footer-links { justify-content: center; }
+
+  /* The empty currency slot is only used on mobile; stop it adding a gap */
+  .footer-currency-slot:empty { display: none; }
+}
+
+/* On narrower desktop/tablet widths the left-pinned logo would collide
+   with the centered links, so stack it above them instead. */
+@media (min-width: 641px) and (max-width: 960px) {
   .footer-right {
     position: relative;
-    width: 140px;
-    height: 100px;
+    left: auto;
+    top: auto;
+    transform: none;
   }
 }
 
