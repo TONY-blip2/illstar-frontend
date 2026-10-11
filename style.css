@@ -3473,7 +3473,9 @@ body.light-mode .status-pending {
   /* Links centered, then the copyright directly underneath */
   .footer-left  { order: 1; width: 100%; }
   .footer-copy  { order: 2; margin-top: 0; }
-  .footer-links { justify-content: center; }
+  .footer-left  { justify-content: center; }
+  .footer-block { width: 100%; }
+  .footer-links { justify-content: center; width: 100%; }
 
   /* The empty currency slot is only used on mobile; stop it adding a gap */
   .footer-currency-slot:empty { display: none; }
