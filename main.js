@@ -1064,21 +1064,60 @@ document.addEventListener('DOMContentLoaded', () => {
     contactCodeEl?.addEventListener('change',  () => { if (contactInputEl?.value) { const r = Validator.validatePhone(contactInputEl.value, contactCodeEl.value); r.ok ? Validator.showValid(contactInputEl) : Validator.showError(contactInputEl, r.error); } });
   }
 
+    function addChatLinkToConfirmation(url, method) {
+    const screen = document.getElementById('co-confirm-screen');
+    if (!screen) return;
+    screen.querySelector('.co-open-chat-link')?.remove();
+    const link = document.createElement('a');
+    link.className = 'co-btn-primary co-open-chat-link';
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.style.cssText = 'max-width:260px;margin:0 auto 12px;text-decoration:none;';
+    link.textContent = method === 'whatsapp' ? 'Open WhatsApp' : 'Open Instagram';
+    const continueBtn = screen.querySelector('button');
+    if (continueBtn && continueBtn.parentNode === screen) screen.insertBefore(link, continueBtn);
+    else screen.appendChild(link);
+  }
+
   async function processOrder(method) {
     if (!validateCheckoutForm()) { showToast('Please fix the highlighted fields.', 'error'); return; }
-    const fname   = document.getElementById('co-fname')?.value || '';
-    const lname   = document.getElementById('co-lname')?.value || '';
-    const email   = document.getElementById('co-email')?.value || '';
-    const address = document.getElementById('co-address')?.value || '';
-    const contact = document.getElementById('co-contact-input')?.value || document.getElementById('co-contact')?.value || '';
+
+    let chatTab = null;
+    try {
+      chatTab = window.open('', '_blank');
+      if (chatTab) {
+        chatTab.document.write('<title>ILLSTAR</title><body style="margin:0;background:#111;color:#fff;font-family:-apple-system,Helvetica,Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh">Placing your order...</body>');
+      }
+    } catch (e) { chatTab = null; }
+
+    const fname       = document.getElementById('co-fname')?.value || '';
+    const lname       = document.getElementById('co-lname')?.value || '';
+    const email       = document.getElementById('co-email')?.value || '';
+    const address     = document.getElementById('co-address')?.value || '';
+    const contact     = document.getElementById('co-contact-input')?.value || document.getElementById('co-contact')?.value || '';
     const contactCode = document.getElementById('co-contact-code')?.value || '';
     const province    = document.getElementById('co-province')?.value || '';
     const country     = document.getElementById('co-country')?.value  || '';
-    const subtotal       = getSubtotalDisplay();
-    const shippingDisplay= calculateShipping();
-    const total          = subtotal + shippingDisplay;
-    const locationLine   = [address, province, country].filter(Boolean).join(', ');
-    const fullContact    = contactCode ? `${contactCode}${contact}` : contact;
+    const sym             = currentCurrency.symbol;
+    const cur             = currencyMap[sym];
+    const subtotal        = getSubtotalDisplay();
+    const shippingDisplay = calculateShipping();
+    const total           = subtotal + shippingDisplay;
+    const locationLine    = [address, province, country].filter(Boolean).join(', ');
+    const fullContact     = contactCode ? `${contactCode}${contact}` : contact;
+    const subtotalZmw = cart.reduce((s, i) => s + i.baseZMW * i.qty, 0);
+    const shippingZmw = currentCurrency.rate ? shippingDisplay / currentCurrency.rate : shippingDisplay;
+
+    if (method === 'instagram') {
+      const itemText = cart.map(i => `• ${i.name} x${i.qty} (${i.size} / ${i.color}) — ${sym}${(getCartItemDisplayPrice(i) * i.qty).toFixed(2)}`).join('\n');
+      const igMsg = `Hello ILLSTAR! I'd like to place an order 🛒\n\nItems:\n${itemText}\n\nSubtotal: ${sym}${subtotal.toFixed(2)}\nShipping: ${pickupMode ? 'Physical Pickup (Lusaka)' : sym + shippingDisplay.toFixed(2)}\nTotal: ${sym}${total.toFixed(2)} ${cur}\n\nName: ${fname} ${lname}\nEmail: ${email}\nContact: ${fullContact}\nAddress: ${pickupMode ? 'PHYSICAL PICKUP — Lusaka' : locationLine}`;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(igMsg)
+          .then(() => showToast('Order details copied — paste them into the Instagram DM.', 'info'))
+          .catch(() => {});
+      }
+    }
 
     try {
       const res = await fetch(API + '/orders', {
@@ -1088,28 +1127,34 @@ document.addEventListener('DOMContentLoaded', () => {
           items: cart.map(i => ({ product_id: i.id, product_name: i.name, name: i.name, price: i.baseZMW, size: i.size, color: i.color, qty: i.qty })),
           ship_first_name: fname, ship_last_name: lname, ship_email: email, ship_phone: fullContact,
           ship_address: address, ship_province: province, ship_country: country,
-          currency: currencyMap[currentCurrency.symbol], currency_symbol: currentCurrency.symbol,
-          subtotal, shipping_cost: shippingDisplay, grand_total: total,
+          currency_used: cur, currency_symbol: sym,
+          subtotal_zmw: subtotalZmw, shipping_zmw: shippingZmw, total_zmw: subtotalZmw + shippingZmw,
           is_pickup: pickupMode ? 1 : 0, payment_method: method,
         })
       });
       const data = await res.json(); if (!res.ok) throw new Error(data.message);
       const realRef = data.data.order.ref;
 
+      let targetUrl;
       if (method === 'whatsapp') {
-        const itemLines = cart.map(i => `• ${i.name} x${i.qty} (${i.size} / ${i.color}) — ${currentCurrency.symbol}${(getCartItemDisplayPrice(i) * i.qty).toFixed(2)}`).join('%0A');
-        const msg = `Hello ILLSTAR! I'd like to place an order 🛒%0A%0A*Items:*%0A${itemLines}%0A%0A*Subtotal:* ${currentCurrency.symbol}${subtotal.toFixed(2)}%0A*Shipping:* ${pickupMode ? 'Physical Pickup (Lusaka)' : currentCurrency.symbol + shippingDisplay.toFixed(2)}%0A*Total:* ${currentCurrency.symbol}${total.toFixed(2)} ${currencyMap[currentCurrency.symbol]}%0A%0A*Order Ref:* #${realRef}%0A*Name:* ${fname} ${lname}%0A*Email:* ${email}%0A*Contact:* ${fullContact}%0A*Address:* ${pickupMode ? 'PHYSICAL PICKUP — Lusaka' : locationLine}`;
-        window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
+        const itemLines = cart.map(i => `• ${i.name} x${i.qty} (${i.size} / ${i.color}) — ${sym}${(getCartItemDisplayPrice(i) * i.qty).toFixed(2)}`).join('\n');
+        const msg = `Hello ILLSTAR! I'd like to place an order 🛒\n\n*Items:*\n${itemLines}\n\n*Subtotal:* ${sym}${subtotal.toFixed(2)}\n*Shipping:* ${pickupMode ? 'Physical Pickup (Lusaka)' : sym + shippingDisplay.toFixed(2)}\n*Total:* ${sym}${total.toFixed(2)} ${cur}\n\n*Order Ref:* #${realRef}\n*Name:* ${fname} ${lname}\n*Email:* ${email}\n*Contact:* ${fullContact}\n*Address:* ${pickupMode ? 'PHYSICAL PICKUP — Lusaka' : locationLine}`;
+        targetUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
       } else {
-        const itemText = cart.map(i => `• ${i.name} x${i.qty} (${i.size} / ${i.color}) — ${currentCurrency.symbol}${(getCartItemDisplayPrice(i) * i.qty).toFixed(2)}`).join('\n');
-        const igMsg = `Hello ILLSTAR! I'd like to place an order 🛒\n\nItems:\n${itemText}\n\nSubtotal: ${currentCurrency.symbol}${subtotal.toFixed(2)}\nShipping: ${currentCurrency.symbol}${shippingDisplay.toFixed(2)}\nTotal: ${currentCurrency.symbol}${total.toFixed(2)} ${currencyMap[currentCurrency.symbol]}\n\nName: ${fname} ${lname}\nEmail: ${email}\nContact: ${fullContact}\nAddress: ${locationLine}`;
-        navigator.clipboard.writeText(igMsg).then(() => showToast('Order details copied!', 'info')).catch(() => {});
-        window.open('https://www.instagram.com/illstarstudios', '_blank');
+        targetUrl = 'https://www.instagram.com/illstarstudios';
       }
-      coShowConfirmation(realRef, { name: `${fname} ${lname}`, email, address: locationLine });
-    } catch (err) { showToast('Order failed: ' + err.message, 'error'); }
-  }
 
+      coShowConfirmation(realRef, { name: `${fname} ${lname}`, email, address: locationLine });
+      addChatLinkToConfirmation(targetUrl, method);
+
+      if (chatTab && !chatTab.closed) chatTab.location.href = targetUrl;
+      else window.location.href = targetUrl;
+    } catch (err) {
+      if (chatTab && !chatTab.closed) chatTab.close();
+      showToast('Order failed: ' + err.message, 'error');
+    }
+  }
+  
   document.getElementById('co-pay-whatsapp')?.addEventListener('click', () => processOrder('whatsapp'));
   document.getElementById('co-pay-instagram')?.addEventListener('click', () => processOrder('instagram'));
 
@@ -1139,10 +1184,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Order status is now read live from the backend in the profile modal
     // (loadProfileOrders), so there's no need to keep a separate localStorage
     // snapshot here anymore — it would only ever go stale.
-    const toEmail     = orderMeta?.email || currentUser?.email || '';
-    const emailSubject= encodeURIComponent(`ILLSTAR Order Confirmation — #${backendRef}`);
-    const emailBody   = encodeURIComponent(`Hi ${orderMeta?.name || 'there'},%0A%0AThank you for your order!%0AOrder Reference: #${backendRef}%0ATotal: ${currentCurrency.symbol}${total.toFixed(2)}`);
-    if (toEmail) setTimeout(() => { window.location.href = `mailto:${toEmail}?subject=${emailSubject}&body=${emailBody}`; }, 800);
     if (form)   form.style.display = 'none';
     if (refEl)  refEl.textContent  = 'ORDER #' + backendRef;
     if (screen) screen.classList.remove('hidden');
