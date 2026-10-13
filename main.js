@@ -1000,6 +1000,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('checkout-open');
     document.getElementById('co-main-form').style.display = '';
     document.getElementById('co-confirm-screen')?.classList.add('hidden');
+    // Charge in the currency of the DELIVERY country (Zambia = Kwacha),
+    // whatever currency the shopper was browsing in.
+    updateCurrencyByCountry(document.getElementById('co-country')?.value || 'ZM');
     updateProvinceVisibility(); coRenderItems(); setupCheckoutValidation(); refreshMmPanel();
     if (currentUser) {
       const parts = (currentUser.name || '').split(' ');
@@ -2250,7 +2253,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(window.devicePixelRatio || 1);
-    renderer.setSize(size, size);
+    renderer.setSize(size, size, false);
     container.appendChild(renderer.domElement);
 
     // Lighting positioned so the rim catches highlights as it turns —

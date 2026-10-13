@@ -3690,8 +3690,9 @@ body.light-mode .admin-proof-thumb { border-color: rgba(0,0,0,0.15); }
   width: 220px;
   height: 220px;
   margin: 0 auto 32px;
+  flex-shrink: 0;
 }
-.os-logo-3d-container canvas { display: block; }
+.os-logo-3d-container canvas { display: block; width: 100%; height: 100%; }
 
 .os-title {
   color: #fff;
