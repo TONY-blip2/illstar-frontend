@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (box) box.classList.toggle('signup-modal', type === 'signup');
     if (type === 'signup') setupSignupValidation();
     if (type === 'login')  setupLoginValidation();
-    if (type === 'profile') loadProfileOrders();
+    if (type === 'profile') { loadProfileOrders(); addClearHistoryButton(); }
     setupPasswordToggles();
     injectAdminButton();
   }
@@ -1373,6 +1373,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>
                   ${customer}
                   <br><span style="font-size:11px;color:var(--muted);">${o.email || ''}${o.phone ? ' · ' + o.phone : ''}</span>
+                  ${formatOrderLocation(o) ? `<br><span style="font-size:11px;color:var(--muted);">${Validator.sanitizeText(formatOrderLocation(o))}</span>` : ''}
                 </td>
                 <td>K${parseFloat(o.total_zmw).toFixed(2)}</td>
                 <td><span class="admin-badge ${statusBadgeClass}">${statusMeta.label}</span></td>
@@ -2197,6 +2198,71 @@ document.addEventListener('DOMContentLoaded', () => {
       // trapping visitors behind a broken overlay.
       osShowOpen();
     }
+  }
+  
+    // ============================================================
+  //  CLEAR ORDERS — customer profile + admin dashboard
+  // ============================================================
+
+  // Adds the "Clear order history" button to the profile popup.
+  function addClearHistoryButton() {
+    const logoutBtn = document.getElementById('logout-btn');
+    if (!logoutBtn || document.getElementById('clear-history-btn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'clear-history-btn';
+    btn.type = 'button';
+    btn.className = 'profile-clear-history-btn';
+    btn.textContent = 'Clear order history';
+    logoutBtn.parentNode.insertBefore(btn, logoutBtn);
+  }
+
+  document.addEventListener('click', async e => {
+    if (e.target.id !== 'clear-history-btn') return;
+    if (!confirm('Clear your order history?\n\nCompleted, cancelled and rejected orders will be removed from this list. Orders still being processed will stay.')) return;
+    try {
+      const res  = await fetch(`${API}/orders/clear-history`, {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Could not clear order history.');
+      showToast('Order history cleared.', 'success');
+      await loadProfileOrders();
+    } catch (err) { showToast(err.message, 'error'); }
+  });
+
+  // Admin: permanently delete every order (typed confirmation required).
+  document.addEventListener('click', async e => {
+    if (e.target.id !== 'admin-clear-orders-btn') return;
+    const typed = prompt(
+      'This PERMANENTLY deletes ALL orders in the database (not just the ones shown here), ' +
+      'resets revenue and order counts to zero, and cannot be undone.\n\nType DELETE to confirm:'
+    );
+    if (typed !== 'DELETE') {
+      if (typed !== null) showToast('Nothing was deleted.', 'info');
+      return;
+    }
+    try {
+      const res  = await fetch(`${API}/orders/admin/clear-all`, {
+        method: 'DELETE',
+        headers: { 'Authorization': 'Bearer ' + token },
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Could not clear orders.');
+      showToast('All orders cleared.', 'success');
+      await window.openAdminDashboard();
+    } catch (err) { showToast(err.message, 'error'); }
+  });
+
+  // "City, Country" for the customer cell in the admin orders table.
+  function formatOrderLocation(o) {
+    const code = String(o.country_code || '').toUpperCase();
+    const opt  = code ? document.querySelector(`#co-country option[value="${code}"]`) : null;
+    const country = opt ? opt.textContent.trim() : code;
+    let city = String(o.province || '').trim();
+    if (city.toLowerCase() === 'northwestern') city = 'North-Western';
+    else city = city.replace(/\b\w/g, c => c.toUpperCase());
+    return [city, country].filter(Boolean).join(', ');
   }
 
   // Sign-up-for-drop modal wiring

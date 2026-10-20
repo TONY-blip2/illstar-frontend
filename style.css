@@ -3954,3 +3954,68 @@ body.light-mode .store-settings-input {
   #footer .footer-copy  { order: 3; width: 100%; margin: 0; text-align: center; }
   #footer .footer-currency-slot { display: none; }
 }
+
+/* ============================================================
+   CLEAR-ORDER BUTTONS
+   ============================================================ */
+.profile-clear-history-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid rgba(231,76,60,0.35);
+  color: #e74c3c;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.profile-clear-history-btn:hover { background: rgba(231,76,60,0.1); }
+
+.admin-clear-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid rgba(231,76,60,0.4);
+  color: #e74c3c;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.admin-clear-btn:hover { background: #e74c3c; color: #fff; }
+
+/* ============================================================
+   MOBILE FONT — match the desktop look on phones
+   ============================================================ */
+@font-face {
+  font-family: "Selawik";
+  src: url("fonts/selawik-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Selawik";
+  src: url("fonts/selawik-semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Selawik";
+  src: url("fonts/selawik-bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --font-main: "Selawik", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+  }
+  input, textarea, select, button { font-family: var(--font-main); }
+}
