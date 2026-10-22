@@ -4019,3 +4019,54 @@ body.light-mode .store-settings-input {
   }
   input, textarea, select, button { font-family: var(--font-main); }
 }
+
+
+/* ============================================================
+   TOUCH DEVICES — no accidental zoom or "micro zoom" effects
+   (Pinch-to-zoom by the user still works.)
+   ============================================================ */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+@media (hover: none) and (pointer: coarse) {
+
+  /* 1. Double-tap-to-zoom off. Pinch-zoom is still allowed. */
+  * { touch-action: manipulation; }
+
+  /* 2. iPhone zooms into any field whose text is under 16px when tapped,
+        and never zooms back out. 16px stops that. */
+  input, select, textarea { font-size: 16px !important; }
+
+  /* 3. The page behind a popup used to shrink and blur (scale 0.98)
+        every time a modal opened or closed. */
+  body.modal-open main,
+  body.modal-open .site-header,
+  body.modal-open .site-footer {
+    filter: none;
+    transform: none;
+    transition: none;
+  }
+
+  /* 4. The popups themselves used to scale in from 98%. Keep the slide,
+        drop the scale. */
+  .global-modal-box { transform: translateY(20px); }
+  .global-modal[aria-hidden="false"] .global-modal-box { transform: translateY(0); }
+  .admin-modal-box { transform: translateY(20px); }
+  .admin-modal[aria-hidden="false"] .admin-modal-box { transform: translateY(0); }
+  .policy-content { animation: fadeIn 0.2s ease; }
+
+  /* 5. Touch has no real "hover". A tap leaves the hover effect stuck on
+        (product images zoom to 110%, buttons and sections jump), and
+        pressing a button shrinks it to 95%. */
+  .card:hover { transform: none; box-shadow: none; }
+  .card:hover img { transform: none; }
+  .co-section-block:hover { transform: none; }
+  #currency-list li:hover { transform: none; }
+  button:hover, .btn:hover, .menu-btn:hover, .expand-btn:hover,
+  .modal-btn:hover, .modal-add-btn:hover, .co-btn-primary:hover,
+  .co-dm-btn:hover, .checkout-btn:hover { transform: none; }
+  button:active, .btn:active, .modal-btn:active, .modal-add-btn:active,
+  .co-btn-primary:active, .co-dm-btn:active { transform: none; }
+
+  /* The image arrows are vertically centred with a transform, so keep it. */
+  .arrow:hover, .arrow:active { transform: translateY(-50%); }
+}
