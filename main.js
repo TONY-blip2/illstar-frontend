@@ -2265,6 +2265,38 @@ document.addEventListener('DOMContentLoaded', () => {
     return [city, country].filter(Boolean).join(', ');
   }
 
+    // ============================================================
+  //  PRODUCT VIEW — "Grid view" switch in the menu (phones only)
+  // ============================================================
+  const gridViewToggle = document.getElementById('grid-view-toggle');
+
+  function applyProductView(isGrid) {
+    document.body.classList.toggle('grid-view', isGrid);
+    if (gridViewToggle) gridViewToggle.checked = isGrid;
+  }
+
+  let savedView = 'list';
+  try { savedView = localStorage.getItem('productView') || 'list'; } catch (e) {}
+  applyProductView(savedView === 'grid');
+
+  gridViewToggle?.addEventListener('change', () => {
+    applyProductView(gridViewToggle.checked);
+    try { localStorage.setItem('productView', gridViewToggle.checked ? 'grid' : 'list'); } catch (e) {}
+    // Close the menu a moment later so the new layout is visible straight away.
+    setTimeout(() => {
+      document.getElementById('side-menu')?.classList.remove('active');
+      document.getElementById('overlay')?.classList.remove('active');
+    }, 250);
+  });
+
+  // On phones the whole product card opens the product, not just the small
+  // "View" button (which is hidden in grid view).
+  document.getElementById('products')?.addEventListener('click', e => {
+    if (!window.matchMedia('(max-width: 640px)').matches) return;
+    if (e.target.closest('a.btn')) return;
+    e.target.closest('.card')?.querySelector('a.btn')?.click();
+  });
+
   // Sign-up-for-drop modal wiring
   document.getElementById('os-signup-btn')?.addEventListener('click', () => {
     const modal = document.getElementById('drop-signup-modal');

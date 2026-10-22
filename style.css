@@ -4070,3 +4070,27 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   /* The image arrows are vertically centred with a transform, so keep it. */
   .arrow:hover, .arrow:active { transform: translateY(-50%); }
 }
+
+
+/* ============================================================
+   GRID VIEW (phones) — 2 products per row, borderless, centred text.
+   Switched on from the "Grid view" toggle in the menu.
+   ============================================================ */
+.view-item { display: none; }
+
+@media (max-width: 640px) {
+  .view-item { display: flex; }
+
+  body.grid-view .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px 8px;
+    margin: 0 -10px;
+  }
+  body.grid-view .card { background: transparent; border-radius: 0; box-shadow: none; }
+  body.grid-view .card img { background: transparent; aspect-ratio: 1 / 1; object-fit: contain; }
+  body.grid-view .card-body { padding: 6px 4px 0; text-align: center; }
+  body.grid-view .card-title { font-size: 12px; margin-top: 0; letter-spacing: 0.02em; }
+  body.grid-view .card-price { font-size: 12px; }
+  body.grid-view .card-actions { display: none; }
+  body.grid-view .card-badge { top: 6px; left: 6px; font-size: 9px; padding: 3px 8px; }
+}
