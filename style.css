@@ -4094,3 +4094,13 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   body.grid-view .card-actions { display: none; }
   body.grid-view .card-badge { top: 6px; left: 6px; font-size: 9px; padding: 3px 8px; }
 }
+
+
+/* ============================================================
+   PHONES — the whole card opens the product, so the "View" button
+   is hidden entirely (this also removes the blank gap it left
+   under the price).
+   ============================================================ */
+@media (max-width: 640px) {
+  .card-actions { display: none; }
+}
