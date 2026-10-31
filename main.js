@@ -1720,6 +1720,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${sizes.map((s, i) => `
               <div class="multi-value-row" data-index="${i}">
                 <input type="text" placeholder="Size" value="${s}" class="pf-size-input" maxlength="5">
+                <label class="pf-size-out"><input type="checkbox" class="pf-size-soldout" ${(existingProduct?.sold_out_sizes || []).includes(s) ? 'checked' : ''}> Sold out</label>
                 <button type="button" class="multi-value-remove" data-remove-size="${i}">✕</button>
               </div>`).join('')}
             <button type="button" class="multi-value-add" id="add-size">+ Add Size</button>
@@ -2296,6 +2297,57 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.closest('a.btn')) return;
     e.target.closest('.card')?.querySelector('a.btn')?.click();
   });
+
+
+  // ============================================================
+  //  ADMIN — "Sold out" tick box on each size in the product form
+  // ============================================================
+
+  // Adds the tick box to any size row that doesn't have one yet. Rows made
+  // by the "+ Add Size" button get theirs from the click listener below.
+  function addSoldOutBoxes() {
+    document.querySelectorAll('#pf-sizes .multi-value-row').forEach(row => {
+      if (row.querySelector('.pf-size-out')) return;
+      const label = document.createElement('label');
+      label.className = 'pf-size-out';
+      label.innerHTML = '<input type="checkbox" class="pf-size-soldout"> Sold out';
+      row.insertBefore(label, row.querySelector('.multi-value-remove'));
+    });
+  }
+  document.addEventListener('click', e => {
+    if (e.target.id === 'add-size') addSoldOutBoxes();
+  });
+
+  // The sizes that are ticked as sold out in the open product form.
+  function collectSoldOutSizes() {
+    return Array.from(document.querySelectorAll('#pf-sizes .multi-value-row'))
+      .filter(row => row.querySelector('.pf-size-soldout')?.checked)
+      .map(row => row.querySelector('.pf-size-input')?.value.trim())
+      .filter(Boolean);
+  }
+
+  // When the product form saves, attach the sold-out sizes to that request.
+  // (Done here so the existing save code doesn't need to be touched. Any
+  // other request is passed through exactly as it was.)
+  const nativeFetch = window.fetch.bind(window);
+  window.fetch = function (url, options) {
+    try {
+      const isProductSave =
+        typeof url === 'string' &&
+        /\/products(\/json|\/[^/?#]+)?$/.test(url) &&
+        options && (options.method === 'POST' || options.method === 'PUT') &&
+        typeof options.body === 'string' &&
+        document.getElementById('pf-sizes');
+      if (isProductSave) {
+        const body = JSON.parse(options.body);
+        if (Array.isArray(body.sizes)) {
+          body.sold_out_sizes = collectSoldOutSizes();
+          options = { ...options, body: JSON.stringify(body) };
+        }
+      }
+    } catch (err) { /* on any problem, send the request unchanged */ }
+    return nativeFetch(url, options);
+  };
 
   // Sign-up-for-drop modal wiring
   document.getElementById('os-signup-btn')?.addEventListener('click', () => {
